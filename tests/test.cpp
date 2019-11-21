@@ -1,5 +1,5 @@
 #include <iostream>
-#include "Matrix.h"
+#include "../Matrix.h"
 using namespace std;
 
 int main() {
