@@ -110,3 +110,16 @@ int Matrix::valueAt(int row, int col) const {
 
     return m_array[row-1][col-1];
 }
+
+Matrix& Matrix::transpose() const {
+    int** tArr = new int*[this->cols()];
+    for (int i = 0; i < this->cols(); i++) {
+        tArr[i] = new int[this->rows()];
+        for (int j = 0; j < this->rows(); j++) {
+            tArr[i][j] = this->m_array[j][i];
+        }
+    }
+
+    Matrix* T = new Matrix(this->cols(), this->rows(), tArr);
+    return *T;
+}

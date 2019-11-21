@@ -22,6 +22,7 @@ public:
     void print() const;
     int valueAt(int row, int col) const;
     int operator()(int row, int col) const;
+    Matrix& transpose() const;
 
     // Mutators
     bool insert(int row, int col, int value);
