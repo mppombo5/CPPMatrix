@@ -194,6 +194,11 @@ Matrix& Matrix::transpose() const {
     return *T;
 }
 
+int Matrix::determinant(const Matrix& A) const {
+    if (!A.isSquare())
+        return 0;
+}
+
 
 ////////////////
 /// Mutators ///

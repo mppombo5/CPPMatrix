@@ -23,6 +23,8 @@ public:
     int rows() const;
     int cols() const;
     int valueAt(int row, int col) const;
+    int determinant(const Matrix& A) const;
+    int det(const Matrix& A) const;
     int* rowVector(int row) const;
     int* colVector(int col) const;
     bool isSquare() const;
@@ -40,6 +42,11 @@ private:
 
 
 inline
+int Matrix::operator()(int row, int col) const {
+    return this->valueAt(row, col);
+}
+
+inline
 int Matrix::rows() const {
     return m_rows;
 }
@@ -54,9 +61,10 @@ bool Matrix::isSquare() const {
     return m_rows == m_cols;
 }
 
+// det(A) is just an alias for determinant(A)
 inline
-int Matrix::operator()(int row, int col) const {
-    return this->valueAt(row, col);
+int Matrix::det(const Matrix& A) const {
+    return determinant(A);
 }
 
 
