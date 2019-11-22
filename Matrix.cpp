@@ -147,7 +147,13 @@ int Matrix::valueAt(int row, int col) const {
     return m_array[row-1][col-1];
 }
 
+// Functions to return an array containing a row or column vector with the elements in the argument's row or column
+
 int* Matrix::rowVector(int row) const {
+    if (row < 1 || row > this->rows()) {
+        cerr << "Invalid dimensions in calling rowVector, returning nullptr." << endl;
+        return nullptr;
+    }
     int* rowVec = new int[this->cols()];
     for (int i = 0; i < this->cols(); i++) {
         rowVec[i] = m_array[row-1][i];
@@ -156,6 +162,10 @@ int* Matrix::rowVector(int row) const {
 }
 
 int* Matrix::colVector(int col) const {
+    if (col < 1 || col > this->cols()) {
+        cerr << "Invalid dimensions in calling colVector, returning nullptr." << endl;
+        return nullptr;
+    }
     int* colVec = new int[this->rows()];
     for (int i = 0; i < this->rows(); i++) {
         colVec[i] = m_array[i][col-1];
