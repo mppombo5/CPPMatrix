@@ -94,6 +94,34 @@ Matrix& Matrix::operator=(const Matrix& src) {
     return *this;
 }
 
+Matrix& Matrix::operator*(const Matrix& m) const {
+    if (this->cols() != m.rows()) {
+        cerr << "ERROR! The columns in the first operand must equal the rows in the second operand." << endl
+             << "Returning 1x1 matrix." << endl << "Eventually I'll handle exceptions correctly." << endl;
+        int** arr = new int*[1];
+        arr[0] = new int[1];
+        arr[0][0] = 0;
+        Matrix* D = new Matrix(1, 1, arr);
+        return *D;
+    }
+
+    int newRows = this->rows();
+    int newCols = m.cols();
+    int commonVal = this->cols();
+
+    int** newArr = new int*[newRows];
+    for (int i = 0; i < newRows; i++) {
+        newArr[i] = new int[newCols];
+        for (int j = 0; j < newCols; j++) {
+            int entry = 0;
+            for (int k = 0; k < commonVal; k++) {
+                entry += (this->m_array[i][k] + m.m_array[k][j]);
+            }
+            newArr[i][j] = entry;
+        }
+    }
+}
+
 
 /////////////////
 /// Accessors ///
@@ -110,7 +138,7 @@ void Matrix::print() const {
 
 int Matrix::valueAt(int row, int col) const {
     if (row < 1 || row > m_rows || col < 1 || col > m_cols) {
-        cerr << "HEY! You tried to access a matrix with invalid parameters. Variable has been set to 0." << endl;
+        cerr << "HEY! You tried to access a matrix with invalid parameters. Returning 0." << endl;
         return 0;
     }
 

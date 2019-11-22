@@ -17,6 +17,7 @@ public:
 
     // Operators
     int operator()(int row, int col) const;
+    Matrix& operator*(const Matrix& m) const;
 
     // Accessors
     int rows() const;
