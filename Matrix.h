@@ -22,9 +22,11 @@ public:
     // Accessors
     int rows() const;
     int cols() const;
+    int valueAt(int row, int col) const;
+    int* rowVector(int row) const;
+    int* colVector(int col) const;
     bool isSquare() const;
     void print() const;
-    int valueAt(int row, int col) const;
     Matrix& transpose() const;
 
     // Mutators

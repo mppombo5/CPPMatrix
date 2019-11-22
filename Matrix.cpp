@@ -120,6 +120,8 @@ Matrix& Matrix::operator*(const Matrix& m) const {
             newArr[i][j] = entry;
         }
     }
+    Matrix* C = new Matrix(newRows, newCols, newArr);
+    return *C;
 }
 
 
@@ -143,6 +145,22 @@ int Matrix::valueAt(int row, int col) const {
     }
 
     return m_array[row-1][col-1];
+}
+
+int* Matrix::rowVector(int row) const {
+    int* rowVec = new int[this->cols()];
+    for (int i = 0; i < this->cols(); i++) {
+        rowVec[i] = m_array[row-1][i];
+    }
+    return rowVec;
+}
+
+int* Matrix::colVector(int col) const {
+    int* colVec = new int[this->rows()];
+    for (int i = 0; i < this->rows(); i++) {
+        colVec[i] = m_array[i][col-1];
+    }
+    return colVec;
 }
 
 Matrix& Matrix::transpose() const {
