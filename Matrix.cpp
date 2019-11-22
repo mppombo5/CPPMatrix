@@ -28,30 +28,30 @@ Matrix::Matrix(int rows, int cols) {
     if (!initialize(rows, cols, &m_rows, &m_cols))
         cerr << invalidInit << endl;
 
-    m_array = new int*[m_rows];
+    m_array = new double*[m_rows];
     for (int i = 0; i < m_rows; i++) {
-        m_array[i] = new int[m_cols];
+        m_array[i] = new double[m_cols];
         for (int j = 0; j < m_cols; j++)
             m_array[i][j] = 0;
     }
 }
 
-Matrix::Matrix(int rows, int cols, int** matrixArray) {
+Matrix::Matrix(int rows, int cols, double** matrixArray) {
     if (!initialize(rows, cols, &m_rows, &m_cols))
         cout << invalidInit << endl;
 
-    m_array = new int*[m_rows];
+    m_array = new double*[m_rows];
     for (int i = 0; i < m_rows; i++) {
-        m_array[i] = new int[m_cols];
+        m_array[i] = new double[m_cols];
         for (int j = 0; j < m_cols; j++)
             m_array[i][j] = matrixArray[i][j];
     }
 }
 
 Matrix::Matrix(const Matrix& src) {
-    int** newArr = new int*[src.rows()];
+    double** newArr = new double*[src.rows()];
     for (int i = 0; i < src.rows(); i++) {
-        newArr[i] = new int[src.cols()];
+        newArr[i] = new double[src.cols()];
         for (int j = 0; j < src.cols(); j++) {
             newArr[i][j] = src.m_array[i][j];
         }
@@ -80,9 +80,9 @@ Matrix& Matrix::operator=(const Matrix& src) {
 
     delete [] m_array;
 
-    int** newArr = new int*[src.rows()];
+    double** newArr = new double*[src.rows()];
     for (int i = 0; i < src.rows(); i++) {
-        newArr[i] = new int[src.cols()];
+        newArr[i] = new double[src.cols()];
         for (int j = 0; j < src.cols(); j++) {
             newArr[i][j] = src.m_array[i][j];
         }
@@ -98,8 +98,8 @@ Matrix& Matrix::operator*(const Matrix& m) const {
     if (this->cols() != m.rows()) {
         cerr << "ERROR! The columns in the first operand must equal the rows in the second operand." << endl
              << "Returning 1x1 matrix." << endl << "Eventually I'll handle exceptions correctly." << endl;
-        int** arr = new int*[1];
-        arr[0] = new int[1];
+        double** arr = new double*[1];
+        arr[0] = new double[1];
         arr[0][0] = 0;
         Matrix* D = new Matrix(1, 1, arr);
         return *D;
@@ -108,19 +108,19 @@ Matrix& Matrix::operator*(const Matrix& m) const {
     int newRows = this->rows();
     int newCols = m.cols();
     int commonVal = this->cols();
-    int** newArr = new int*[newRows];
+    double** newArr = new double*[newRows];
 
     // preemptively make an array of column vectors to save on space and accesses
-    int** columnVectors = new int*[m.cols()];
+    double** columnVectors = new double*[m.cols()];
     for (int i = 0; i < m.cols(); i++) {
         columnVectors[i] = m.colVector(i+1);
     }
 
     for (int i = 0; i < newRows; i++) {
-        int* rowVec = this->rowVector(i+1);
-        newArr[i] = new int[newCols];
+        double* rowVec = this->rowVector(i+1);
+        newArr[i] = new double[newCols];
         for (int j = 0; j < newCols; j++) {
-            int entry = 0;
+            double entry = 0;
             for (int k = 0; k < commonVal; k++) {
                 entry += (rowVec[k] * columnVectors[j][k]);
             }
@@ -146,7 +146,7 @@ void Matrix::print() const {
     }
 }
 
-int Matrix::valueAt(int row, int col) const {
+double Matrix::valueAt(int row, int col) const {
     if (row < 1 || row > m_rows || col < 1 || col > m_cols) {
         cerr << "HEY! You tried to access a matrix with invalid parameters. Returning 0." << endl;
         return 0;
@@ -157,24 +157,24 @@ int Matrix::valueAt(int row, int col) const {
 
 // Functions to return an array containing a row or column vector with the elements in the argument's row or column
 
-int* Matrix::rowVector(int row) const {
+double* Matrix::rowVector(int row) const {
     if (row < 1 || row > this->rows()) {
         cerr << "Invalid dimensions in calling rowVector, returning nullptr." << endl;
         return nullptr;
     }
-    int* rowVec = new int[this->cols()];
+    double* rowVec = new double[this->cols()];
     for (int i = 0; i < this->cols(); i++) {
         rowVec[i] = m_array[row-1][i];
     }
     return rowVec;
 }
 
-int* Matrix::colVector(int col) const {
+double* Matrix::colVector(int col) const {
     if (col < 1 || col > this->cols()) {
         cerr << "Invalid dimensions in calling colVector, returning nullptr." << endl;
         return nullptr;
     }
-    int* colVec = new int[this->rows()];
+    double* colVec = new double[this->rows()];
     for (int i = 0; i < this->rows(); i++) {
         colVec[i] = m_array[i][col-1];
     }
@@ -182,9 +182,9 @@ int* Matrix::colVector(int col) const {
 }
 
 Matrix& Matrix::transpose() const {
-    int** tArr = new int*[this->cols()];
+    double** tArr = new double*[this->cols()];
     for (int i = 0; i < this->cols(); i++) {
-        tArr[i] = new int[this->rows()];
+        tArr[i] = new double[this->rows()];
         for (int j = 0; j < this->rows(); j++) {
             tArr[i][j] = this->m_array[j][i];
         }
@@ -204,7 +204,7 @@ int Matrix::determinant(const Matrix& A) const {
 /// Mutators ///
 ////////////////
 
-bool Matrix::insert(int row, int col, int value) {
+bool Matrix::insert(int row, int col, double value) {
     if (row > m_rows || row < 1 || col > m_cols || col < 1)
         return false;
 

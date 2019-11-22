@@ -9,16 +9,16 @@ using namespace std;
 
 int main() {
     // 3x4 matrix A
-    int Arow1[4] = {
+    double Arow1[4] = {
             1, 2, 3, 4
     };
-    int Arow2[4] = {
+    double Arow2[4] = {
             2, 3, 4, 5
     };
-    int Arow3[4] = {
+    double Arow3[4] = {
             3, 4, 5, 6
     };
-    int* arrA[] = {
+    double* arrA[] = {
             Arow1, Arow2, Arow3
     };
     Matrix A(3, 4, arrA);
@@ -27,19 +27,19 @@ int main() {
     cout << endl;
 
     // 4x5 matrix B
-    int Brow1[5] = {
+    double Brow1[5] = {
             1, 2, 3, 4, 5
     };
-    int Brow2[5] = {
+    double Brow2[5] = {
             2, 3, 4, 5, 6
     };
-    int Brow3[5] = {
+    double Brow3[5] = {
             3, 4, 5, 6, 7
     };
-    int Brow4[5] = {
+    double Brow4[5] = {
             4, 5, 6, 7, 8
     };
-    int* arrB[] = {
+    double* arrB[] = {
             Brow1, Brow2, Brow3, Brow4
     };
     Matrix B(4, 5, arrB);
@@ -64,5 +64,5 @@ int main() {
     assert(DE.rows() == 1);
     assert(DE.cols() == 1);
 
-    cout << "All tests passed!" << endl;
+    cout << "All multiplication tests passed!" << endl;
 }
