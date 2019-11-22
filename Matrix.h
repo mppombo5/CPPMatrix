@@ -15,13 +15,15 @@ public:
     Matrix(const Matrix& src);
     ~Matrix();
 
+    // Operators
+    int operator()(int row, int col) const;
+
     // Accessors
     int rows() const;
     int cols() const;
     bool isSquare() const;
     void print() const;
     int valueAt(int row, int col) const;
-    int operator()(int row, int col) const;
     Matrix& transpose() const;
 
     // Mutators
