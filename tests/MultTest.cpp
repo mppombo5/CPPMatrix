@@ -47,13 +47,22 @@ int main() {
     B.print();
     cout << endl;
 
-    Matrix C = A * B;
-    cout << "C:" << endl;
-    C.print();
+    Matrix AB = A * B;
+    cout << "AB:" << endl;
+    AB.print();
     cout << endl;
-    assert(C.rows() == A.rows());
-    assert(C.cols() == B.cols());
-    assert(C(2, 2) == 1*2 + 2*3 + 3*4 + 4*5);
-    assert(C(1, 1) == (1*1) + (2*2) + 3*3 + 4*4);
+    assert(AB.rows() == A.rows());
+    assert(AB.cols() == B.cols());
+    assert(AB(1, 1) == 1*1 + 2*2 + 3*3 + 4*4);
+    assert(AB(1, 2) == 1*2 + 2*3 + 3*4 + 4*5);
+    assert(AB(2, 2) == 2*2 + 3 * 3 + 4 * 4 + 5 * 5);
+    assert(AB(1, 5) == 1*5 + 2 * 6 + 3 * 7 + 4 * 8);
 
+    Matrix D(7, 9);
+    Matrix E(7, 9);
+    Matrix DE = D * E;
+    assert(DE.rows() == 1);
+    assert(DE.cols() == 1);
+
+    cout << "All tests passed!" << endl;
 }

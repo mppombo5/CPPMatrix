@@ -108,18 +108,26 @@ Matrix& Matrix::operator*(const Matrix& m) const {
     int newRows = this->rows();
     int newCols = m.cols();
     int commonVal = this->cols();
-
     int** newArr = new int*[newRows];
+
+    // preemptively make an array of column vectors to save on space and accesses
+    int** columnVectors = new int*[m.cols()];
+    for (int i = 0; i < m.cols(); i++) {
+        columnVectors[i] = m.colVector(i+1);
+    }
+
     for (int i = 0; i < newRows; i++) {
+        int* rowVec = this->rowVector(i+1);
         newArr[i] = new int[newCols];
         for (int j = 0; j < newCols; j++) {
             int entry = 0;
             for (int k = 0; k < commonVal; k++) {
-                entry += (this->m_array[i][k] + m.m_array[k][j]);
+                entry += (rowVec[k] * columnVectors[j][k]);
             }
             newArr[i][j] = entry;
         }
     }
+
     Matrix* C = new Matrix(newRows, newCols, newArr);
     return *C;
 }
