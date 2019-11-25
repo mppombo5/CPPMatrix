@@ -49,7 +49,7 @@ Matrix::Matrix(int rows, int cols, double** matrixArray) {
 }
 
 Matrix::Matrix(const Matrix& src) {
-    double** newArr = new double*[src.rows()];
+    auto** newArr = new double*[src.rows()];
     for (int i = 0; i < src.rows(); i++) {
         newArr[i] = new double[src.cols()];
         for (int j = 0; j < src.cols(); j++) {
@@ -80,7 +80,7 @@ Matrix& Matrix::operator=(const Matrix& src) {
 
     delete [] m_array;
 
-    double** newArr = new double*[src.rows()];
+    auto** newArr = new double*[src.rows()];
     for (int i = 0; i < src.rows(); i++) {
         newArr[i] = new double[src.cols()];
         for (int j = 0; j < src.cols(); j++) {
@@ -98,20 +98,20 @@ Matrix& Matrix::operator*(const Matrix& m) const {
     if (this->cols() != m.rows()) {
         cerr << "ERROR! The columns in the first operand must equal the rows in the second operand." << endl
              << "Returning 1x1 matrix." << endl << "Eventually I'll handle exceptions correctly." << endl;
-        double** arr = new double*[1];
+        auto** arr = new double*[1];
         arr[0] = new double[1];
         arr[0][0] = 0;
-        Matrix* D = new Matrix(1, 1, arr);
+        auto* D = new Matrix(1, 1, arr);
         return *D;
     }
 
     int newRows = this->rows();
     int newCols = m.cols();
     int commonVal = this->cols();
-    double** newArr = new double*[newRows];
+    auto** newArr = new double*[newRows];
 
     // preemptively make an array of column vectors to save on space and accesses
-    double** columnVectors = new double*[m.cols()];
+    auto** columnVectors = new double*[m.cols()];
     for (int i = 0; i < m.cols(); i++) {
         columnVectors[i] = m.colVector(i+1);
     }
@@ -128,7 +128,7 @@ Matrix& Matrix::operator*(const Matrix& m) const {
         }
     }
 
-    Matrix* C = new Matrix(newRows, newCols, newArr);
+    auto* C = new Matrix(newRows, newCols, newArr);
     return *C;
 }
 
@@ -162,7 +162,7 @@ double* Matrix::rowVector(int row) const {
         cerr << "Invalid dimensions in calling rowVector, returning nullptr." << endl;
         return nullptr;
     }
-    double* rowVec = new double[this->cols()];
+    auto* rowVec = new double[this->cols()];
     for (int i = 0; i < this->cols(); i++) {
         rowVec[i] = m_array[row-1][i];
     }
@@ -174,7 +174,7 @@ double* Matrix::colVector(int col) const {
         cerr << "Invalid dimensions in calling colVector, returning nullptr." << endl;
         return nullptr;
     }
-    double* colVec = new double[this->rows()];
+    auto* colVec = new double[this->rows()];
     for (int i = 0; i < this->rows(); i++) {
         colVec[i] = m_array[i][col-1];
     }
@@ -182,7 +182,7 @@ double* Matrix::colVector(int col) const {
 }
 
 Matrix& Matrix::transpose() const {
-    double** tArr = new double*[this->cols()];
+    auto** tArr = new double*[this->cols()];
     for (int i = 0; i < this->cols(); i++) {
         tArr[i] = new double[this->rows()];
         for (int j = 0; j < this->rows(); j++) {
@@ -190,13 +190,72 @@ Matrix& Matrix::transpose() const {
         }
     }
 
-    Matrix* T = new Matrix(this->cols(), this->rows(), tArr);
+    auto* T = new Matrix(this->cols(), this->rows(), tArr);
     return *T;
 }
 
-int Matrix::determinant(const Matrix& A) const {
-    if (!A.isSquare())
+/*
+double Matrix::detHelper(const Matrix& A, int rowIndex, int colIndex, int rows, int cols) const {
+    if (A.rows() == 1 && A.cols() == 1)
+        return A(1, 1);
+
+    if (A.rows() == 2 && A.cols() == 2) {
+        // return ad - bc
+        return ((A(1,1)*A(2,2)) - (A(1,2)*A(2,1)));
+    }
+
+
+} */
+
+/*
+ * header:
+ * size of submatrix, offset, matrix's array itself
+ * double determinant = 0;
+ * for (int i = 0; i < submatrix size; i++) {
+ *     if (i == row to ignore) continue;
+ *     int sign = 1;
+ *     if (submatrix size % 2 == 1) sign = -1;
+ *     determinant += (sign * detHelper(subSize-1, offset+1, row to ignore = i)
+ * }
+ */
+double Matrix::detHelper(int size, int offset, double** array) const {
+    if (size == 2) {
+        /*
+         * Matrix of the form:
+         * a b
+         * c d ;
+         * returns ad - bc
+         */
+        return ((array[offset][offset]*array[offset+1][offset+1]) - (array[offset][offset+1]*array[offset+1][offset]));
+    }
+
+    double determinant = 0;
+    for(int i = 0; i < size; i++) {
+        int sign = (i % 2 == 0) ? 1 : -1;
+
+        // swap row to ignore with first row
+        double* firstRow = array[offset];
+        double* offsetRow = array[offset + i];
+        array[offset] = offsetRow;
+        array[offset+i] = firstRow;
+
+        determinant += sign * (offsetRow[0] * detHelper(size - 1, offset + 1, array));
+
+        // swap the rows back
+        array[offset] = firstRow;
+        array[offset+i] = offsetRow;
+    }
+}
+
+double Matrix::determinant() const {
+    if (!this->isSquare()) {
+        cerr << "Matrix is not square, cannot take valid determinant; returning 0." << endl;
         return 0;
+    }
+    if (this->rows() == 1)
+        return this->valueAt(1, 1);
+
+    return detHelper(this->rows(), 0, this->m_array);
 }
 
 

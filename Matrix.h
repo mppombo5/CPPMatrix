@@ -22,17 +22,11 @@ public:
     // Accessors
     int rows() const;
     int cols() const;
-<<<<<<< HEAD
     double valueAt(int row, int col) const;
-    double determinant(const Matrix& A) const;
-    double det(const Matrix& A) const;
+    double determinant() const;
+    double det() const;
     double* rowVector(int row) const;
     double* colVector(int col) const;
-=======
-    double valueAt(int row, int col) const;
-    double* rowVector(int row) const;
-    double* colVector(int col) const;
->>>>>>> master
     bool isSquare() const;
     void print() const;
     Matrix& transpose() const;
@@ -44,6 +38,8 @@ private:
     int m_rows;
     int m_cols;
     double** m_array;
+
+    double detHelper(int size, int offset, double** array) const;
 };
 
 
@@ -69,13 +65,9 @@ bool Matrix::isSquare() const {
 
 // det(A) is just an alias for determinant(A)
 inline
-<<<<<<< HEAD
-double Matrix::det(const Matrix& A) const {
-    return determinant(A);
-=======
-double Matrix::operator()(int row, int col) const {
-    return this->valueAt(row, col);
->>>>>>> master
+double Matrix::det() const {
+    return this->determinant();
+
 }
 
 
