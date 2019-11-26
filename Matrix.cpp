@@ -194,31 +194,7 @@ Matrix& Matrix::transpose() const {
     return *T;
 }
 
-/*
-double Matrix::detHelper(const Matrix& A, int rowIndex, int colIndex, int rows, int cols) const {
-    if (A.rows() == 1 && A.cols() == 1)
-        return A(1, 1);
-
-    if (A.rows() == 2 && A.cols() == 2) {
-        // return ad - bc
-        return ((A(1,1)*A(2,2)) - (A(1,2)*A(2,1)));
-    }
-
-
-} */
-
-/*
- * header:
- * size of submatrix, offset, matrix's array itself
- * double determinant = 0;
- * for (int i = 0; i < submatrix size; i++) {
- *     if (i == row to ignore) continue;
- *     int sign = 1;
- *     if (submatrix size % 2 == 1) sign = -1;
- *     determinant += (sign * detHelper(subSize-1, offset+1, row to ignore = i)
- * }
- */
-double Matrix::detHelper(int size, int offset, double** array) const {
+double Matrix::detHelper(int size, int offset, double** array) {
     if (size == 2) {
         /*
          * Matrix of the form:
@@ -233,21 +209,21 @@ double Matrix::detHelper(int size, int offset, double** array) const {
     for(int i = 0; i < size; i++) {
         int sign = (i % 2 == 0) ? 1 : -1;
 
-        // swap row to ignore with first row
-        double* firstRow = array[offset];
-        double* offsetRow = array[offset + i];
-        array[offset] = offsetRow;
-        array[offset+i] = firstRow;
+        // swapRows treats rows and columns with their actual position, so add 1
+        this->swapRows((offset + 1), (offset + 1) + i);
 
-        determinant += sign * (offsetRow[0] * detHelper(size - 1, offset + 1, array));
+        determinant += sign * m_array[offset][offset] * detHelper(size - 1, offset + 1, array);
+    }
 
-        // swap the rows back
-        array[offset] = firstRow;
-        array[offset+i] = offsetRow;
+    // the lowest row will be on the top, so just swap them all back
+    int j = 1;
+    while (j < (size + 1)) {
+        this->swapRows((offset + j) + 1, offset + j);
+        j++;
     }
 }
 
-double Matrix::determinant() const {
+double Matrix::determinant() {
     if (!this->isSquare()) {
         cerr << "Matrix is not square, cannot take valid determinant; returning 0." << endl;
         return 0;
@@ -255,7 +231,7 @@ double Matrix::determinant() const {
     if (this->rows() == 1)
         return this->valueAt(1, 1);
 
-    return detHelper(this->rows(), 0, this->m_array);
+    return detHelper(m_rows, 0, this->m_array);
 }
 
 
@@ -263,10 +239,25 @@ double Matrix::determinant() const {
 /// Mutators ///
 ////////////////
 
+// inserts a value 'value' into into the matrix at row 'row,' column 'col'
 bool Matrix::insert(int row, int col, double value) {
     if (row > m_rows || row < 1 || col > m_cols || col < 1)
         return false;
 
     m_array[row - 1][col - 1] = value;
+    return true;
+}
+
+// simply swaps two rows in a matrix, using the "temp and switch" method
+bool Matrix::swapRows(int row1, int row2) {
+    if (row1 < 1 || row1 > m_rows || row2 < 1 || row2 > m_rows)
+        return false;
+
+    if (row1 == row2)
+        return true;
+
+    double* tmp = this->m_array[row1 - 1];
+    this->m_array[row1 - 1] = this->m_array[row2 - 1];
+    this->m_array[row2 - 1] = tmp;
     return true;
 }

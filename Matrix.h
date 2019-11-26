@@ -23,23 +23,25 @@ public:
     int rows() const;
     int cols() const;
     double valueAt(int row, int col) const;
-    double determinant() const;
-    double det() const;
     double* rowVector(int row) const;
     double* colVector(int col) const;
     bool isSquare() const;
     void print() const;
     Matrix& transpose() const;
 
+    double determinant();
+    double det();
+
     // Mutators
     bool insert(int row, int col, double value);
+    bool swapRows(int row1, int row2);
 
 private:
     int m_rows;
     int m_cols;
     double** m_array;
 
-    double detHelper(int size, int offset, double** array) const;
+    double detHelper(int size, int offset, double** array);
 };
 
 
@@ -65,7 +67,7 @@ bool Matrix::isSquare() const {
 
 // det(A) is just an alias for determinant(A)
 inline
-double Matrix::det() const {
+double Matrix::det() {
     return this->determinant();
 
 }
