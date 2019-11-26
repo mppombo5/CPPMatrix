@@ -4,7 +4,7 @@
 
 #include <iostream>
 #include <cassert>
-#include "../Matrix.h"
+#include "../src/Matrix.h"
 using namespace std;
 
 int main() {

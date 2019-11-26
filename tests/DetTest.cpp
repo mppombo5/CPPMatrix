@@ -2,7 +2,7 @@
 // Created by Matthew Pombo on 11/24/19.
 //
 
-#include "../Matrix.h"
+#include "../src/Matrix.h"
 #include <iostream>
 #include <cassert>
 using namespace std;

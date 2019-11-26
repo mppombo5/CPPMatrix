@@ -4,7 +4,7 @@
 
 // test cases for row and column vectors
 
-#include "../Matrix.h"
+#include "../src/Matrix.h"
 #include <iostream>
 #include <cassert>
 using namespace std;
