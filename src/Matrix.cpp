@@ -221,6 +221,7 @@ double Matrix::detHelper(int size, int offset, double** array) {
         this->swapRows((offset + j) + 1, offset + j);
         j++;
     }
+    return determinant;
 }
 
 double Matrix::determinant() {
