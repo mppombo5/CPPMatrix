@@ -4,10 +4,13 @@
 
 #include <iostream>
 #include <cassert>
+#include "MainTest.h"
 #include "../src/Matrix.h"
 using namespace std;
 
-int main() {
+void MultTest() {
+    cout << "Starting multiplication tests..." << endl;
+
     // 3x4 matrix A
     double Arow1[4] = {
             1, 2, 3, 4
@@ -22,9 +25,6 @@ int main() {
             Arow1, Arow2, Arow3
     };
     Matrix A(3, 4, arrA);
-    cout << "A:" << endl;
-    A.print();
-    cout << endl;
 
     // 4x5 matrix B
     double Brow1[5] = {
@@ -43,14 +43,8 @@ int main() {
             Brow1, Brow2, Brow3, Brow4
     };
     Matrix B(4, 5, arrB);
-    cout << "B:" << endl;
-    B.print();
-    cout << endl;
 
     Matrix AB = A * B;
-    cout << "AB:" << endl;
-    AB.print();
-    cout << endl;
     assert(AB.rows() == A.rows());
     assert(AB.cols() == B.cols());
     assert(AB(1, 1) == 1*1 + 2*2 + 3*3 + 4*4);

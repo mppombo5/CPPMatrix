@@ -5,11 +5,14 @@
 // test cases for row and column vectors
 
 #include "../src/Matrix.h"
+#include "MainTest.h"
 #include <iostream>
 #include <cassert>
 using namespace std;
 
-int main() {
+void RCVTest() {
+    cout << "Starting row/column vector tests..." << endl;
+
     // 3x4 matrix A
     double Arow1[4] = {
             1, 2, 3, 4

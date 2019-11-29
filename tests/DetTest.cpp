@@ -3,11 +3,14 @@
 //
 
 #include "../src/Matrix.h"
+#include "MainTest.h"
 #include <iostream>
 #include <cassert>
 using namespace std;
 
-int main() {
+void DetTest() {
+    cout << "Starting determinant tests..." << endl;
+
     double Arow1[2] = {
             2, 4
     };

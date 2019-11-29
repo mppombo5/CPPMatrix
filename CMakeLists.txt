@@ -3,7 +3,5 @@ project(Matrix)
 
 set(CMAKE_CXX_STANDARD 17)
 
-add_executable(MainTest src/Matrix.cpp src/Matrix.h tests/MainTest.cpp)
-add_executable(MultiplyTest src/Matrix.cpp src/Matrix.h tests/MultTest.cpp)
-add_executable(RCVectorsTest src/Matrix.cpp src/Matrix.h tests/RCVectorsTest.cpp)
-add_executable(DetTest src/Matrix.cpp src/Matrix.h tests/DetTest.cpp)
+add_executable(MainTest src/Matrix.cpp src/Matrix.h
+        tests/DetTest.cpp tests/MultTest.cpp tests/RCVectorsTest.cpp tests/MainTest.cpp tests/MainTest.h)
