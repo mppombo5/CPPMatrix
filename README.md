@@ -10,11 +10,10 @@ Well, I love math and I love a challenge – so I decided to do that myself! My 
 
 ## Standards
 
-- Developed in according to C++17 ISO standard
+- Developed in C++ according to C++17 ISO standard
 - [CMake](https://cmake.org/) is used to build, test, and update
 - I use `lowerCamelCase` for variables and functions, and `m_hungarianNaming` for data members.
   - However, I believe formatting semantics come second to making readable code that's easy to use and understand.
-  - Unless your name is Thien, and your sick, twisted mind uses `rEVERSEcAMELcASE`.
 
 ## Tools Used
 
