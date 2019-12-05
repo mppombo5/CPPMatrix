@@ -150,6 +150,21 @@ Matrix& Matrix::operator+(const Matrix& m) const {
     return *A;
 }
 
+bool Matrix::operator==(const Matrix & m) const {
+    if (m_rows != m.m_rows || m_cols != m.m_cols) {
+        return false;
+    }
+
+    for (int i = 0; i < m_rows; i++) {
+        for (int j = 0; j < m_cols; j++) {
+            if (m_array[i][j] != m.m_array[i][j]) {
+                return false;
+            }
+        }
+    }
+    return true;
+}
+
 
 /////////////////
 /// Accessors ///

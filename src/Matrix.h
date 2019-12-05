@@ -20,6 +20,7 @@ public:
     Matrix& operator*(const Matrix& m) const;
     Matrix& operator+(const Matrix& m) const;
     bool operator==(const Matrix& m) const;
+    bool operator!=(const Matrix& m) const;
 
     // Accessors
     int rows() const;
@@ -72,6 +73,11 @@ inline
 double Matrix::det() {
     return this->determinant();
 
+}
+
+inline
+bool Matrix::operator!=(const Matrix& m) const {
+    return !operator==(m);
 }
 
 

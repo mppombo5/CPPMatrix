@@ -135,3 +135,35 @@ void AddTest() {
 
     cout << "All addition tests passed!" << endl;
 }
+
+void EqualTest() {
+    cout << "Starting equivalence tests..." << endl;
+
+    double Arow1[2] = { 1, 1 };
+    double Arow2[2] = { 2, 2 };
+    double* Arows[] = { Arow1, Arow2 };
+    Matrix A(2, 2, Arows);
+
+    double Brow1[2] = { 1, 1 };
+    double Brow2[2] = { 2, 2 };
+    double* Brows[] = { Brow1, Brow2 };
+    Matrix B(2, 2, Brows);
+
+    assert(A == B && !(A != B));
+
+    double Crow1[2] = { 1, 1 };
+    double Crow2[2] = { 2, 1 };
+    double* Crows[] = { Crow1, Crow2 };
+    Matrix C(2, 2, Crows);
+
+    assert(A != C && !(A == C));
+
+    double Drow1[3] = { 1, 1, 1 };
+    double Drow2[3] = { 2, 2, 2 };
+    double* Drows[] = { Drow1, Drow2 };
+    Matrix D(2, 3, Drows);
+
+    assert(A != D && !(A == D));
+
+    cout << "Equivalence tests passed!" << endl;
+}

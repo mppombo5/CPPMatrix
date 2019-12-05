@@ -8,6 +8,7 @@
 void DetTest();
 void MultTest();
 void AddTest();
+void EqualTest();
 void RCVTest();
 void TransposeTest();
 
