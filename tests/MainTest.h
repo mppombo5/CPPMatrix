@@ -8,5 +8,6 @@
 void DetTest();
 void MultTest();
 void RCVTest();
+void TransposeTest();
 
 #endif //MATRIX_MAINTESTS_H

@@ -11,7 +11,7 @@ using namespace std;
 /// Constructors/Destructors ///
 ////////////////////////////////
 
-const char* invalidInit = "HEY! Those are invalid dimensions. Must have more than 1 rows and columns. Defaulting to 1x1 matrix.";
+const char* invalidInit = "Invalid dimensions passed to constructor; defaulting to 1x1 matrix.";
 
 bool initialize(int rows, int cols, int* targetRows, int* targetCols) {
     if (rows < 1 || cols < 1) {
@@ -96,8 +96,8 @@ Matrix& Matrix::operator=(const Matrix& src) {
 
 Matrix& Matrix::operator*(const Matrix& m) const {
     if (this->cols() != m.rows()) {
-        cerr << "ERROR! The columns in the first operand must equal the rows in the second operand." << endl
-             << "Returning 1x1 matrix." << endl << "Eventually I'll handle exceptions correctly." << endl;
+        cerr << "Matrix multiplication error: The columns in the first operand must equal the rows in the second operand." << endl
+             << "Returning 1x1 matrix." << endl;
         auto** arr = new double*[1];
         arr[0] = new double[1];
         arr[0][0] = 0;
@@ -170,24 +170,21 @@ double* Matrix::rowVector(int row) const {
 }
 
 double* Matrix::colVector(int col) const {
-    if (col < 1 || col > this->cols()) {
+    if (col < 1 || col > this->m_cols) {
         cerr << "Invalid dimensions in calling colVector, returning nullptr." << endl;
         return nullptr;
     }
-    auto* colVec = new double[this->rows()];
-    for (int i = 0; i < this->rows(); i++) {
+    auto* colVec = new double[this->m_rows];
+    for (int i = 0; i < this->m_rows; i++) {
         colVec[i] = m_array[i][col-1];
     }
     return colVec;
 }
 
 Matrix& Matrix::transpose() const {
-    auto** tArr = new double*[this->cols()];
-    for (int i = 0; i < this->cols(); i++) {
-        tArr[i] = new double[this->rows()];
-        for (int j = 0; j < this->rows(); j++) {
-            tArr[i][j] = this->m_array[j][i];
-        }
+    auto** tArr = new double*[m_cols];
+    for (int i = 0; i < m_cols; i++) {
+        tArr[i] = colVector(i+1);
     }
 
     auto* T = new Matrix(this->cols(), this->rows(), tArr);

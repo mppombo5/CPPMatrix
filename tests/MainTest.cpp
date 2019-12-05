@@ -7,6 +7,7 @@ int main() {
     DetTest();
     MultTest();
     RCVTest();
+    TransposeTest();
 
     return 0;
 }
