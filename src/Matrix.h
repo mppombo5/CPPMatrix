@@ -11,13 +11,15 @@ public:
     Matrix(int rows, int cols);
     // initialize a rows x cols matrix according to a given 2D array or vector
     Matrix(int rows, int cols, double** matrixArray);
-    Matrix& operator=(const Matrix& src);
     Matrix(const Matrix& src);
     ~Matrix();
 
     // Operators
+    Matrix& operator=(const Matrix& src);
     double operator()(int row, int col) const;
     Matrix& operator*(const Matrix& m) const;
+    Matrix& operator+(const Matrix& m) const;
+    bool operator==(const Matrix& m) const;
 
     // Accessors
     int rows() const;

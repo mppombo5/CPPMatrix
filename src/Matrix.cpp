@@ -48,17 +48,17 @@ Matrix::Matrix(int rows, int cols, double** matrixArray) {
 }
 
 Matrix::Matrix(const Matrix& src) {
-    auto** newArr = new double*[src.rows()];
-    for (int i = 0; i < src.rows(); i++) {
-        newArr[i] = new double[src.cols()];
-        for (int j = 0; j < src.cols(); j++) {
+    auto** newArr = new double*[src.m_rows];
+    for (int i = 0; i < src.m_rows; i++) {
+        newArr[i] = new double[src.m_cols];
+        for (int j = 0; j < src.m_cols; j++) {
             newArr[i][j] = src.m_array[i][j];
         }
     }
 
     m_array = newArr;
-    m_rows = src.rows();
-    m_cols = src.cols();
+    m_rows = src.m_rows;
+    m_cols = src.m_cols;
 }
 
 Matrix::~Matrix() {
@@ -77,22 +77,22 @@ Matrix& Matrix::operator=(const Matrix& src) {
     if (&src == this)
         return *this;
 
-    for (int i = 0; i < src.rows(); i++)
+    for (int i = 0; i < src.m_rows; i++)
         delete [] m_array[i];
 
     delete [] m_array;
 
-    auto** newArr = new double*[src.rows()];
-    for (int i = 0; i < src.rows(); i++) {
-        newArr[i] = new double[src.cols()];
-        for (int j = 0; j < src.cols(); j++) {
+    auto** newArr = new double*[src.m_rows];
+    for (int i = 0; i < src.m_rows; i++) {
+        newArr[i] = new double[src.m_cols];
+        for (int j = 0; j < src.m_cols; j++) {
             newArr[i][j] = src.m_array[i][j];
         }
     }
 
     m_array = newArr;
-    m_rows = src.rows();
-    m_cols = src.cols();
+    m_rows = src.m_rows;
+    m_cols = src.m_cols;
     return *this;
 }
 
@@ -100,21 +100,18 @@ Matrix& Matrix::operator*(const Matrix& m) const {
     if (m_cols != m.m_rows) {
         cerr << "Matrix multiplication error: The columns in the first operand must equal the rows in the second operand." << endl
              << "Returning 1x1 matrix." << endl;
-        auto** arr = new double*[1];
-        arr[0] = new double[1];
-        arr[0][0] = 0;
-        auto* D = new Matrix(1, 1, arr);
+        auto* D = new Matrix(1, 1);
         return *D;
     }
 
     int newRows = m_rows;
-    int newCols = m.cols();
+    int newCols = m.m_cols;
     int commonVal = m_cols;
     auto** newArr = new double*[newRows];
 
     // preemptively make an array of column vectors to save on space and accesses
-    auto** columnVectors = new double*[m.cols()];
-    for (int i = 0; i < m.cols(); i++) {
+    auto** columnVectors = new double*[m.m_cols];
+    for (int i = 0; i < m.m_cols; i++) {
         columnVectors[i] = m.colVector(i+1);
     }
 
@@ -132,6 +129,25 @@ Matrix& Matrix::operator*(const Matrix& m) const {
 
     auto* C = new Matrix(newRows, newCols, newArr);
     return *C;
+}
+
+Matrix& Matrix::operator+(const Matrix& m) const {
+    if (m_rows != m.m_rows || m_cols != m.m_cols) {
+        cerr << "Matrix addition error: the two operands must have the same dimensions." << endl
+             << "Returning 1x1 matrix." << endl;
+        auto* D = new Matrix(1, 1);
+        return *D;
+    }
+
+    auto** newArr = new double*[m_rows];
+    for (int i = 0; i < m_rows; i++) {
+        newArr[i] = new double[m_cols];
+        for (int j = 0; j < m_cols; j++) {
+            newArr[i][j] = m_array[i][j] + m.m_array[i][j];
+        }
+    }
+    auto* A = new Matrix(m_rows, m_cols, newArr);
+    return *A;
 }
 
 
