@@ -74,6 +74,9 @@ Matrix::~Matrix() {
 /////////////////
 
 Matrix& Matrix::operator=(const Matrix& src) {
+    if (&src == this)
+        return *this;
+
     for (int i = 0; i < src.rows(); i++)
         delete [] m_array[i];
 
