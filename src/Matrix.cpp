@@ -3,7 +3,6 @@
 //
 
 #include <iostream>
-#include <iomanip>
 #include "Matrix.h"
 using namespace std;
 
@@ -95,7 +94,7 @@ Matrix& Matrix::operator=(const Matrix& src) {
 }
 
 Matrix& Matrix::operator*(const Matrix& m) const {
-    if (this->cols() != m.rows()) {
+    if (m_cols != m.m_rows) {
         cerr << "Matrix multiplication error: The columns in the first operand must equal the rows in the second operand." << endl
              << "Returning 1x1 matrix." << endl;
         auto** arr = new double*[1];
@@ -105,9 +104,9 @@ Matrix& Matrix::operator*(const Matrix& m) const {
         return *D;
     }
 
-    int newRows = this->rows();
+    int newRows = m_rows;
     int newCols = m.cols();
-    int commonVal = this->cols();
+    int commonVal = m_cols;
     auto** newArr = new double*[newRows];
 
     // preemptively make an array of column vectors to save on space and accesses
@@ -117,7 +116,7 @@ Matrix& Matrix::operator*(const Matrix& m) const {
     }
 
     for (int i = 0; i < newRows; i++) {
-        double* rowVec = this->rowVector(i+1);
+        double* rowVec = rowVector(i+1);
         newArr[i] = new double[newCols];
         for (int j = 0; j < newCols; j++) {
             double entry = 0;
@@ -158,24 +157,24 @@ double Matrix::valueAt(int row, int col) const {
 // Functions to return an array containing a row or column vector with the elements in the argument's row or column
 
 double* Matrix::rowVector(int row) const {
-    if (row < 1 || row > this->rows()) {
+    if (row < 1 || row > m_rows) {
         cerr << "Invalid dimensions in calling rowVector, returning nullptr." << endl;
         return nullptr;
     }
-    auto* rowVec = new double[this->cols()];
-    for (int i = 0; i < this->cols(); i++) {
+    auto* rowVec = new double[m_cols];
+    for (int i = 0; i < m_cols; i++) {
         rowVec[i] = m_array[row-1][i];
     }
     return rowVec;
 }
 
 double* Matrix::colVector(int col) const {
-    if (col < 1 || col > this->m_cols) {
+    if (col < 1 || col > m_cols) {
         cerr << "Invalid dimensions in calling colVector, returning nullptr." << endl;
         return nullptr;
     }
-    auto* colVec = new double[this->m_rows];
-    for (int i = 0; i < this->m_rows; i++) {
+    auto* colVec = new double[m_rows];
+    for (int i = 0; i < m_rows; i++) {
         colVec[i] = m_array[i][col-1];
     }
     return colVec;
@@ -187,7 +186,7 @@ Matrix& Matrix::transpose() const {
         tArr[i] = colVector(i+1);
     }
 
-    auto* T = new Matrix(this->cols(), this->rows(), tArr);
+    auto* T = new Matrix(m_cols, m_rows, tArr);
     return *T;
 }
 
@@ -207,7 +206,7 @@ double Matrix::detHelper(int size, int offset, double** array) {
         int sign = (i % 2 == 0) ? 1 : -1;
 
         // swapRows treats rows and columns with their actual position, so add 1
-        this->swapRows((offset + 1), (offset + 1) + i);
+        swapRows((offset + 1), (offset + 1) + i);
 
         determinant += sign * m_array[offset][offset] * detHelper(size - 1, offset + 1, array);
     }
@@ -215,21 +214,21 @@ double Matrix::detHelper(int size, int offset, double** array) {
     // the lowest row will be on the top, so just swap them all back
     int j = 1;
     while (j < (size + 1)) {
-        this->swapRows((offset + j) + 1, offset + j);
+        swapRows((offset + j) + 1, offset + j);
         j++;
     }
     return determinant;
 }
 
 double Matrix::determinant() {
-    if (!this->isSquare()) {
+    if (!isSquare()) {
         cerr << "Matrix is not square, cannot take valid determinant; returning 0." << endl;
         return 0;
     }
-    if (this->rows() == 1)
-        return this->valueAt(1, 1);
+    if (m_rows == 1)
+        return valueAt(1, 1);
 
-    return detHelper(m_rows, 0, this->m_array);
+    return detHelper(m_rows, 0, m_array);
 }
 
 
@@ -254,8 +253,8 @@ bool Matrix::swapRows(int row1, int row2) {
     if (row1 == row2)
         return true;
 
-    double* tmp = this->m_array[row1 - 1];
-    this->m_array[row1 - 1] = this->m_array[row2 - 1];
-    this->m_array[row2 - 1] = tmp;
+    double* tmp = m_array[row1 - 1];
+    m_array[row1 - 1] = m_array[row2 - 1];
+    m_array[row2 - 1] = tmp;
     return true;
 }
