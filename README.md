@@ -17,6 +17,6 @@ Well, I love math and I love a challenge – so I decided to do that myself! My 
 
 ## Tools Used
 
-- Matrix was developed using [JetBrains CLion](https://www.jetbrains.com/clion/), which itself uses CMake to build and update the project.
+- CPPMatrix was developed using [JetBrains CLion](https://www.jetbrains.com/clion/), which itself uses CMake to build and update the project.
 - The documentation is written in [Markdown](https://daringfireball.net/projects/markdown/).
   - I personally use and recommend Yu Zhang's [Markdown All In One](https://marketplace.visualstudio.com/items?itemName=yzhang.markdown-all-in-one) extension for [VSCode](https://code.visualstudio.com/) for writing Markdown – use whatever works best for you!
