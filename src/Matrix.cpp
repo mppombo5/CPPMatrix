@@ -181,7 +181,7 @@ void Matrix::print() const {
 
 double Matrix::valueAt(int row, int col) const {
     if (row < 1 || row > m_rows || col < 1 || col > m_cols) {
-        cerr << "HEY! You tried to access a matrix with invalid parameters. Returning 0." << endl;
+        cerr << "Attempted element access to matrix with invalid dimensions. Returning 0." << endl;
         return 0;
     }
 
