@@ -10,6 +10,7 @@ int main() {
     EqualTest();
     RCVTest();
     TransposeTest();
+    ConstructTest();
 
     return 0;
 }

@@ -11,5 +11,6 @@ void AddTest();
 void EqualTest();
 void RCVTest();
 void TransposeTest();
+void ConstructTest();
 
 #endif //MATRIX_MAINTESTS_H

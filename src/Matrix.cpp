@@ -37,13 +37,31 @@ Matrix::Matrix(int rows, int cols) {
 
 Matrix::Matrix(int rows, int cols, double** matrixArray) {
     if (!initialize(rows, cols, &m_rows, &m_cols))
-        cout << invalidInit << endl;
+        cerr << invalidInit << endl;
 
     m_array = new double*[m_rows];
     for (int i = 0; i < m_rows; i++) {
         m_array[i] = new double[m_cols];
         for (int j = 0; j < m_cols; j++)
             m_array[i][j] = matrixArray[i][j];
+    }
+}
+
+Matrix::Matrix(int rows, int cols, double* matrixArray) {
+    if (!initialize(rows, cols, &m_rows, &m_cols))
+        cerr << invalidInit << endl;
+
+    m_array = new double*[m_rows];
+
+    int i = 0;
+    while (i < m_rows) {
+        m_array[i] = new double[m_cols];
+        int j = 0;
+        while (j < m_cols) {
+            m_array[i][j] = matrixArray[i*m_cols + j];
+            j++;
+        }
+        i++;
     }
 }
 

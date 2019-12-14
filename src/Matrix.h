@@ -9,8 +9,13 @@ class Matrix {
 public:
     // initialize a rows x cols matrix with all 0's
     Matrix(int rows, int cols);
+
     // initialize a rows x cols matrix according to a given 2D array or vector
     Matrix(int rows, int cols, double** matrixArray);
+
+    // easier constructor using a single array of doubles
+    Matrix(int rows, int cols, double* matrixarray);
+
     Matrix(const Matrix& src);
     ~Matrix();
 
