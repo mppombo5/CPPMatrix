@@ -39,7 +39,15 @@ The Matrix class has two main constructors:
 
     If `double** array` does not have the same number of rows and columns as `rows` and `cols`, then the subsequent behavior of your program is undefined.
 
-In addition to these two basic constructors, the Matrix class also supports copy and assignment construction:
+3. ```C++
+   Matrix A(int rows, int cols, double* array);
+   ```
+
+    This constructor, in contrast with #2, takes in a one-dimensional array of doubles as an argument, and automatically separates the elements into rows and columns based on the arguments passed to `rows` and `cols`.  I find it easiest to declare the array as `double[rows*cols]` to keep track of the dimensions.
+
+    If your one-dimensional array of doubles does not have `rows * cols` elements, the subsequent behavior of your program is undefined.
+
+In addition to these three basic constructors, the Matrix class also supports copy and assignment construction:
 
 ```C++
 // copy construction according to existing Matrix A:

@@ -6,6 +6,7 @@
 - [Getting Values from a Matrix](#getting-values-from-a-matrix)
 - [Taking the Transpose of a Matrix](#taking-the-transpose-of-a-matrix)
 - [Printing out a Matrix](#printing-out-a-matrix)
+- [Further Reading](#further-reading)
 
 ## Characteristics of a Matrix
 
@@ -71,3 +72,7 @@ void print() const;
 ```
 
 This will print out each row of the matrix to standard output, with each value separated by a single `\t` tab character.
+
+## Further Reading
+
+Feel free to consult the [reference](README.md) for more on how to use your matrix.
