@@ -58,7 +58,7 @@
 You can also take the transpose of a matrix:
 
 ```C++
-Matrix& transpose() const;
+CPPMat::Matrix& transpose() const;
 ```
 
 This will return a new matrix whose column vectors are equal to the original matrix's row vectors.

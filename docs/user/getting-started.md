@@ -3,6 +3,7 @@
 ## Table of Contents <!-- omit in toc -->
 
 - [Basics of a Matrix](#basics-of-a-matrix)
+- [The CPPMat Namespace](#the-cppmat-namespace)
 - [Declaration/Usage](#declarationusage)
 - [Next Steps](#next-steps)
 
@@ -19,12 +20,26 @@ Matrices are an immensely powerful object in the world of mathematics, and there
 
 and many more. The goal of this library is to provide you with an easy way to perform many of these manipulations and calculations in C++.
 
+## The CPPMat Namespace
+
+All classes within CPPMatrix fall under the `CPPMat` namespace. As such, when declaring a new object from CPPMatrix you must either declare usage of the namespace, i.e.
+
+```C++
+using namespace CPPMat;
+```
+
+or use the namespace identifier before every new object, e.g.
+
+```C++
+CPPMat::Matrix A(...);
+```
+
 ## Declaration/Usage
 
 The Matrix class has two main constructors:
 
 1. ```C++
-   Matrix A(int rows, int cols);
+   CPPMat::Matrix A(int rows, int cols);
    ```
 
     This is the most basic initialization of a matrix. It will create a matrix with the given number of rows and columns; upon declaration, all entries in the matrix will be 0.
@@ -32,7 +47,7 @@ The Matrix class has two main constructors:
     If `rows` or `cols` is less than 0, the matrix is initialized with **both** fields set to 1. This is to avoid incorrect calculations that might still be valid if one of the fields were set to its intended value.
 
 2. ```C++
-   Matrix A(int rows, int cols, double** array);
+   CPPMat::Matrix A(int rows, int cols, double** array);
    ```
 
     This constructor allows you to initialize a matrix with the values that you want it to have. In addition to specifying the number of rows and columns, you can also pass in a 2-dimensional array of doubles to represent what the matrix's entries will look like. Each array of doubles acts as a row, and every entry in those array act as a column entry in that row.
@@ -40,7 +55,7 @@ The Matrix class has two main constructors:
     If `double** array` does not have the same number of rows and columns as `rows` and `cols`, then the subsequent behavior of your program is undefined.
 
 3. ```C++
-   Matrix A(int rows, int cols, double* array);
+   CPPMat::Matrix A(int rows, int cols, double* array);
    ```
 
     This constructor, in contrast with #2, takes in a one-dimensional array of doubles as an argument, and automatically separates the elements into rows and columns based on the arguments passed to `rows` and `cols`.  I find it easiest to declare the array as `double[rows*cols]` to keep track of the dimensions.
@@ -51,8 +66,8 @@ In addition to these three basic constructors, the Matrix class also supports co
 
 ```C++
 // copy construction according to existing Matrix A:
-Matrix B = A;
-Matrix C(A);
+CPPMat::Matrix B = A;
+CPPMat::Matrix C(A);
 
 // assignment of existing Matrix D to A:
 D = A;
