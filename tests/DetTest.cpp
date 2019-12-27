@@ -13,7 +13,7 @@ void DetTest() {
     double Arow1[2] = { 2, 4 };
     double Arow2[2] = { 3, 1 };
     double* Arows[] = { Arow1, Arow2 };
-    Matrix A(2, 2, Arows);
+    CPPMat::Matrix A(2, 2, Arows);
 
     assert(A.det() == -10);
     for (int i = 0; i < A.rows(); i++) {
@@ -26,7 +26,7 @@ void DetTest() {
     double Brow2[3] = { 8, 6, 5 };
     double Brow3[3] = { 9, 0, 6 };
     double* Brows[] = { Brow1, Brow2, Brow3 };
-    Matrix B(3, 3, Brows);
+    CPPMat::Matrix B(3, 3, Brows);
 
     assert(B.det() == -144);
     for (int i = 0; i < B.rows(); i++) {
@@ -40,7 +40,7 @@ void DetTest() {
     double Crow3[4] = { 4, 3, 9, 7 };
     double Crow4[4] = { 5, 2, 0, 9 };
     double* Crows[] = { Crow1, Crow2, Crow3, Crow4 };
-    Matrix C(4, 4, Crows);
+    CPPMat::Matrix C(4, 4, Crows);
 
     assert(C.det() == -376);
     for (int i = 0; i < C.rows(); i++) {
@@ -55,7 +55,7 @@ void DetTest() {
     double Drow4[5] = { 5, 3, 7, 3, 1 };
     double Drow5[5] = { 2, 4, 7, 3, 1 };
     double* Drows[] = { Drow1, Drow2, Drow3, Drow4, Drow5 };
-    Matrix D(5, 5, Drows);
+    CPPMat::Matrix D(5, 5, Drows);
 
     assert(D.det() == 420);
     for (int i = 0; i < D.rows(); i++) {
@@ -64,5 +64,5 @@ void DetTest() {
         }
     }
 
-    std::cout << "All determinant tests passed!" << std::endl << std::endl;
+    std::cout << "All determinant tests passed." << std::endl << std::endl;
 }

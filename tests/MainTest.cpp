@@ -11,5 +11,7 @@ int main() {
     TransposeTest();
     ConstructTest();
 
+    std::cout << "All tests passed!" << std::endl;
+
     return 0;
 }

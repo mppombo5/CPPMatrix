@@ -22,7 +22,7 @@ bool initialize(int rows, int cols, int* targetRows, int* targetCols) {
     return true;
 }
 
-Matrix::Matrix(int rows, int cols) {
+CPPMat::Matrix::Matrix(int rows, int cols) {
     if (!initialize(rows, cols, &m_rows, &m_cols))
         std::cerr << invalidInit << std::endl;
 
@@ -34,7 +34,7 @@ Matrix::Matrix(int rows, int cols) {
     }
 }
 
-Matrix::Matrix(int rows, int cols, double** matrixArray) {
+CPPMat::Matrix::Matrix(int rows, int cols, double** matrixArray) {
     if (!initialize(rows, cols, &m_rows, &m_cols))
         std::cerr << invalidInit << std::endl;
 
@@ -46,7 +46,7 @@ Matrix::Matrix(int rows, int cols, double** matrixArray) {
     }
 }
 
-Matrix::Matrix(int rows, int cols, double* matrixArray) {
+CPPMat::Matrix::Matrix(int rows, int cols, double* matrixArray) {
     if (!initialize(rows, cols, &m_rows, &m_cols))
         std::cerr << invalidInit << std::endl;
 
@@ -64,7 +64,7 @@ Matrix::Matrix(int rows, int cols, double* matrixArray) {
     }
 }
 
-Matrix::Matrix(const Matrix& src) {
+CPPMat::Matrix::Matrix(const Matrix& src) {
     auto** newArr = new double*[src.m_rows];
     for (int i = 0; i < src.m_rows; i++) {
         newArr[i] = new double[src.m_cols];
@@ -78,7 +78,7 @@ Matrix::Matrix(const Matrix& src) {
     m_cols = src.m_cols;
 }
 
-Matrix::~Matrix() {
+CPPMat::Matrix::~Matrix() {
     for (int i = 0; i < m_rows; i++)
         delete [] m_array[i];
 
@@ -90,7 +90,7 @@ Matrix::~Matrix() {
 /// Operators ///
 /////////////////
 
-Matrix& Matrix::operator=(const Matrix& src) {
+CPPMat::Matrix& CPPMat::Matrix::operator=(const Matrix& src) {
     if (&src == this)
         return *this;
 
@@ -113,7 +113,7 @@ Matrix& Matrix::operator=(const Matrix& src) {
     return *this;
 }
 
-Matrix& Matrix::operator*(const Matrix& m) const {
+CPPMat::Matrix& CPPMat::Matrix::operator*(const Matrix& m) const {
     if (m_cols != m.m_rows) {
         std::cerr << "Matrix multiplication error: The columns in the first operand must equal the rows in the second operand." << std::endl
              << "Returning 1x1 matrix." << std::endl;
@@ -148,7 +148,7 @@ Matrix& Matrix::operator*(const Matrix& m) const {
     return *C;
 }
 
-Matrix& Matrix::operator+(const Matrix& m) const {
+CPPMat::Matrix& CPPMat::Matrix::operator+(const Matrix& m) const {
     if (m_rows != m.m_rows || m_cols != m.m_cols) {
         std::cerr << "Matrix addition error: the two operands must have the same dimensions." << std::endl
              << "Returning 1x1 matrix." << std::endl;
@@ -167,7 +167,7 @@ Matrix& Matrix::operator+(const Matrix& m) const {
     return *A;
 }
 
-bool Matrix::operator==(const Matrix & m) const {
+bool CPPMat::Matrix::operator==(const Matrix & m) const {
     if (m_rows != m.m_rows || m_cols != m.m_cols) {
         return false;
     }
@@ -187,7 +187,7 @@ bool Matrix::operator==(const Matrix & m) const {
 /// Accessors ///
 /////////////////
 
-void Matrix::print() const {
+void CPPMat::Matrix::print() const {
     for (int i = 0; i < m_rows; i++) {
         for (int j = 0; j < m_cols; j++) {
             std::cout << m_array[i][j] << "\t";
@@ -196,7 +196,7 @@ void Matrix::print() const {
     }
 }
 
-double Matrix::valueAt(int row, int col) const {
+double CPPMat::Matrix::valueAt(int row, int col) const {
     if (row < 1 || row > m_rows || col < 1 || col > m_cols) {
         std::cerr << "Attempted element access to matrix with invalid dimensions. Returning 0." << std::endl;
         return 0;
@@ -207,7 +207,7 @@ double Matrix::valueAt(int row, int col) const {
 
 // Functions to return an array containing a row or column vector with the elements in the argument's row or column
 
-double* Matrix::rowVector(int row) const {
+double* CPPMat::Matrix::rowVector(int row) const {
     if (row < 1 || row > m_rows) {
         std::cerr << "Invalid dimensions in calling rowVector, returning nullptr." << std::endl;
         return nullptr;
@@ -219,7 +219,7 @@ double* Matrix::rowVector(int row) const {
     return rowVec;
 }
 
-double* Matrix::colVector(int col) const {
+double* CPPMat::Matrix::colVector(int col) const {
     if (col < 1 || col > m_cols) {
         std::cerr << "Invalid dimensions in calling colVector, returning nullptr." << std::endl;
         return nullptr;
@@ -231,7 +231,7 @@ double* Matrix::colVector(int col) const {
     return colVec;
 }
 
-Matrix& Matrix::transpose() const {
+CPPMat::Matrix& CPPMat::Matrix::transpose() const {
     auto** tArr = new double*[m_cols];
     for (int i = 0; i < m_cols; i++) {
         tArr[i] = colVector(i+1);
@@ -241,7 +241,7 @@ Matrix& Matrix::transpose() const {
     return *T;
 }
 
-double Matrix::detHelper(int size, int offset, double** array) {
+double CPPMat::Matrix::detHelper(int size, int offset, double** array) {
     if (size == 2) {
         /*
          * Matrix of the form:
@@ -271,7 +271,7 @@ double Matrix::detHelper(int size, int offset, double** array) {
     return determinant;
 }
 
-double Matrix::determinant() {
+double CPPMat::Matrix::determinant() {
     if (!isSquare()) {
         std::cerr << "Matrix is not square, cannot take valid determinant; returning 0." << std::endl;
         return 0;
@@ -288,7 +288,7 @@ double Matrix::determinant() {
 ////////////////
 
 // inserts a value 'value' into into the matrix at row 'row,' column 'col'
-bool Matrix::insert(int row, int col, double value) {
+bool CPPMat::Matrix::insert(int row, int col, double value) {
     if (row > m_rows || row < 1 || col > m_cols || col < 1)
         return false;
 
@@ -297,7 +297,7 @@ bool Matrix::insert(int row, int col, double value) {
 }
 
 // simply swaps two rows in a matrix, using the "temp and switch" method
-bool Matrix::swapRows(int row1, int row2) {
+bool CPPMat::Matrix::swapRows(int row1, int row2) {
     if (row1 < 1 || row1 > m_rows || row2 < 1 || row2 > m_rows)
         return false;
 

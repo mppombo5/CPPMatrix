@@ -23,7 +23,7 @@ void ConstructTest() {
             5, 3, 7, 3, 1,
             2, 4, 7, 3, 1
     };
-    Matrix D(5, 5, Darr);
+    CPPMat::Matrix D(5, 5, Darr);
     assert(D.det() == 420);
 
     // copy-paste from RCVector tests
@@ -33,7 +33,7 @@ void ConstructTest() {
             3, 4, 5, 6
     };
 
-    Matrix A(3, 4, Aarr);
+    CPPMat::Matrix A(3, 4, Aarr);
 
     double colVec[3] = { 2, 3, 4 };
     double* AcolVec1 = A.colVector(2);
@@ -41,5 +41,5 @@ void ConstructTest() {
         assert(colVec[i] == AcolVec1[i]);
     }
 
-    std::cout << "All constructor tests passed!" << std::endl << std::endl;
+    std::cout << "All constructor tests passed." << std::endl << std::endl;
 }
