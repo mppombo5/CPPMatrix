@@ -11,10 +11,9 @@
 #include "../src/Matrix.h"
 #include "MainTest.h"
 #include <iostream>
-using namespace std;
 
 void ConstructTest() {
-    cout << "Starting constructor tests..." << endl;
+    std::cout << "Starting constructor tests..." << std::endl;
 
     // copy and paste from DetTest.cpp
     double Darr[5*5] = {
@@ -42,5 +41,5 @@ void ConstructTest() {
         assert(colVec[i] == AcolVec1[i]);
     }
 
-    cout << "All constructor tests passed!" << endl << endl;
+    std::cout << "All constructor tests passed!" << std::endl << std::endl;
 }

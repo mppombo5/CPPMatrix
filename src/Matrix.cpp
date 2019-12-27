@@ -4,7 +4,6 @@
 
 #include <iostream>
 #include "Matrix.h"
-using namespace std;
 
 ////////////////////////////////
 /// Constructors/Destructors ///
@@ -25,7 +24,7 @@ bool initialize(int rows, int cols, int* targetRows, int* targetCols) {
 
 Matrix::Matrix(int rows, int cols) {
     if (!initialize(rows, cols, &m_rows, &m_cols))
-        cerr << invalidInit << endl;
+        std::cerr << invalidInit << std::endl;
 
     m_array = new double*[m_rows];
     for (int i = 0; i < m_rows; i++) {
@@ -37,7 +36,7 @@ Matrix::Matrix(int rows, int cols) {
 
 Matrix::Matrix(int rows, int cols, double** matrixArray) {
     if (!initialize(rows, cols, &m_rows, &m_cols))
-        cerr << invalidInit << endl;
+        std::cerr << invalidInit << std::endl;
 
     m_array = new double*[m_rows];
     for (int i = 0; i < m_rows; i++) {
@@ -49,7 +48,7 @@ Matrix::Matrix(int rows, int cols, double** matrixArray) {
 
 Matrix::Matrix(int rows, int cols, double* matrixArray) {
     if (!initialize(rows, cols, &m_rows, &m_cols))
-        cerr << invalidInit << endl;
+        std::cerr << invalidInit << std::endl;
 
     m_array = new double*[m_rows];
 
@@ -116,8 +115,8 @@ Matrix& Matrix::operator=(const Matrix& src) {
 
 Matrix& Matrix::operator*(const Matrix& m) const {
     if (m_cols != m.m_rows) {
-        cerr << "Matrix multiplication error: The columns in the first operand must equal the rows in the second operand." << endl
-             << "Returning 1x1 matrix." << endl;
+        std::cerr << "Matrix multiplication error: The columns in the first operand must equal the rows in the second operand." << std::endl
+             << "Returning 1x1 matrix." << std::endl;
         auto* D = new Matrix(1, 1);
         return *D;
     }
@@ -151,8 +150,8 @@ Matrix& Matrix::operator*(const Matrix& m) const {
 
 Matrix& Matrix::operator+(const Matrix& m) const {
     if (m_rows != m.m_rows || m_cols != m.m_cols) {
-        cerr << "Matrix addition error: the two operands must have the same dimensions." << endl
-             << "Returning 1x1 matrix." << endl;
+        std::cerr << "Matrix addition error: the two operands must have the same dimensions." << std::endl
+             << "Returning 1x1 matrix." << std::endl;
         auto* D = new Matrix(1, 1);
         return *D;
     }
@@ -191,15 +190,15 @@ bool Matrix::operator==(const Matrix & m) const {
 void Matrix::print() const {
     for (int i = 0; i < m_rows; i++) {
         for (int j = 0; j < m_cols; j++) {
-            cout << m_array[i][j] << "\t";
+            std::cout << m_array[i][j] << "\t";
         }
-        cout << endl;
+        std::cout << std::endl;
     }
 }
 
 double Matrix::valueAt(int row, int col) const {
     if (row < 1 || row > m_rows || col < 1 || col > m_cols) {
-        cerr << "Attempted element access to matrix with invalid dimensions. Returning 0." << endl;
+        std::cerr << "Attempted element access to matrix with invalid dimensions. Returning 0." << std::endl;
         return 0;
     }
 
@@ -210,7 +209,7 @@ double Matrix::valueAt(int row, int col) const {
 
 double* Matrix::rowVector(int row) const {
     if (row < 1 || row > m_rows) {
-        cerr << "Invalid dimensions in calling rowVector, returning nullptr." << endl;
+        std::cerr << "Invalid dimensions in calling rowVector, returning nullptr." << std::endl;
         return nullptr;
     }
     auto* rowVec = new double[m_cols];
@@ -222,7 +221,7 @@ double* Matrix::rowVector(int row) const {
 
 double* Matrix::colVector(int col) const {
     if (col < 1 || col > m_cols) {
-        cerr << "Invalid dimensions in calling colVector, returning nullptr." << endl;
+        std::cerr << "Invalid dimensions in calling colVector, returning nullptr." << std::endl;
         return nullptr;
     }
     auto* colVec = new double[m_rows];
@@ -274,7 +273,7 @@ double Matrix::detHelper(int size, int offset, double** array) {
 
 double Matrix::determinant() {
     if (!isSquare()) {
-        cerr << "Matrix is not square, cannot take valid determinant; returning 0." << endl;
+        std::cerr << "Matrix is not square, cannot take valid determinant; returning 0." << std::endl;
         return 0;
     }
     if (m_rows == 1)

@@ -6,10 +6,9 @@
 #include "../src/Matrix.h"
 #include <iostream>
 #include <cassert>
-using namespace std;
 
 void TransposeTest() {
-    cout << "Starting transpose tests..." << endl;
+    std::cout << "Starting transpose tests..." << std::endl;
 
     double Arow1[3] = { 1, 2, 3 };
     double Arow2[3] = { 4, 5, 6 };
@@ -44,5 +43,5 @@ void TransposeTest() {
         }
     }
 
-    cout << "All transpose tests passed!" << endl << endl;
+    std::cout << "All transpose tests passed!" << std::endl << std::endl;
 }

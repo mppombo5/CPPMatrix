@@ -8,10 +8,9 @@
 #include "MainTest.h"
 #include <iostream>
 #include <cassert>
-using namespace std;
 
 void RCVTest() {
-    cout << "Starting row/column vector tests..." << endl;
+    std::cout << "Starting row/column vector tests..." << std::endl;
 
     // 3x4 matrix A
     double Arow1[4] = { 1, 2, 3, 4 };
@@ -40,5 +39,5 @@ void RCVTest() {
     double* invalidColVec2 = A.colVector(0);
     assert(invalidColVec == nullptr && invalidColVec2 == nullptr);
 
-    cout << "All RCVector tests passed!" << endl << endl;
+    std::cout << "All RCVector tests passed!" << std::endl << std::endl;
 }

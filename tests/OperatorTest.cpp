@@ -6,10 +6,9 @@
 #include <cassert>
 #include "MainTest.h"
 #include "../src/Matrix.h"
-using namespace std;
 
 void MultTest() {
-    cout << "Starting multiplication tests..." << endl;
+    std::cout << "Starting multiplication tests..." << std::endl;
 
     // 3x4 matrix A
     double Arow1[4] = { 1, 2, 3, 4 };
@@ -40,11 +39,11 @@ void MultTest() {
     assert(DE.rows() == 1);
     assert(DE.cols() == 1);
 
-    cout << "All multiplication tests passed!" << endl << endl;
+    std::cout << "All multiplication tests passed!" << std::endl << std::endl;
 }
 
 void AddTest() {
-    cout << "Starting addition tests..." << endl;
+    std::cout << "Starting addition tests..." << std::endl;
 
     double Arow1[2] = { 1, 0 };
     double Arow2[2] = { 0, 1 };
@@ -86,11 +85,11 @@ void AddTest() {
     C = A + E;
     assert(C.rows() == 1 && C.cols() == 1 && C(1, 1) == 0);
 
-    cout << "All addition tests passed!" << endl << endl;
+    std::cout << "All addition tests passed!" << std::endl << std::endl;
 }
 
 void EqualTest() {
-    cout << "Starting equivalence tests..." << endl;
+    std::cout << "Starting equivalence tests..." << std::endl;
 
     double Arow1[2] = { 1, 1 };
     double Arow2[2] = { 2, 2 };
@@ -118,5 +117,5 @@ void EqualTest() {
 
     assert(A != D && !(A == D));
 
-    cout << "Equivalence tests passed!" << endl << endl;
+    std::cout << "Equivalence tests passed!" << std::endl << std::endl;
 }

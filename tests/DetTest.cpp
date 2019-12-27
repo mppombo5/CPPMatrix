@@ -6,10 +6,9 @@
 #include "MainTest.h"
 #include <iostream>
 #include <cassert>
-using namespace std;
 
 void DetTest() {
-    cout << "Starting determinant tests..." << endl;
+    std::cout << "Starting determinant tests..." << std::endl;
 
     double Arow1[2] = { 2, 4 };
     double Arow2[2] = { 3, 1 };
@@ -65,5 +64,5 @@ void DetTest() {
         }
     }
 
-    cout << "All determinant tests passed!" << endl << endl;
+    std::cout << "All determinant tests passed!" << std::endl << std::endl;
 }
