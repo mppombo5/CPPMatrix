@@ -3,8 +3,15 @@ project(CPPMatrix)
 
 set(CMAKE_CXX_STANDARD 17)
 
-add_executable(MainTest src/Matrix.cpp src/Matrix.h
-        tests/DetTest.cpp tests/OperatorTest.cpp tests/RCVectorsTest.cpp tests/MainTest.cpp tests/MainTest.h tests/TransposeTest.cpp tests/ConstructorTest.cpp)
+set(SRCFILES src/Matrix.cpp src/Matrix.h)
+set (TESTFILES tests/DetTest.cpp tests/OperatorTest.cpp tests/RCVectorsTest.cpp tests/MainTest.cpp
+        tests/MainTest.h tests/TransposeTest.cpp tests/ConstructorTest.cpp)
 
-add_library(CPPMTXstatic STATIC src/Matrix.cpp src/Matrix.h)
-add_library(CPPMTXshared SHARED src/Matrix.cpp src/Matrix.h)
+add_executable(test ${SRCFILES} ${TESTFILES})
+set_target_properties(test PROPERTIES OUTPUT_NAME "MainTest")
+
+add_library(static STATIC ${SRCFILES})
+set_target_properties(static PROPERTIES OUTPUT_NAME "CPPMat")
+
+add_library(shared SHARED ${SRCFILES})
+set_target_properties(shared PROPERTIES OUTPUT_NAME "CPPMat")
