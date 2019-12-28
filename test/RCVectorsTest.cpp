@@ -4,7 +4,7 @@
 
 // test cases for row and column vectors
 
-#include "../src/Matrix.h"
+#include "../include/CPPMatrix.h"
 #include "MainTest.h"
 #include <iostream>
 #include <cassert>

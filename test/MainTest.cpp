@@ -1,5 +1,5 @@
 #include <iostream>
-#include "../src/Matrix.h"
+#include "../include/CPPMatrix.h"
 #include "MainTest.h"
 
 int main() {

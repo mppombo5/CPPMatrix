@@ -3,7 +3,7 @@
 //
 
 #include <iostream>
-#include "Matrix.h"
+#include "../include/CPPMatrix.h"
 
 ////////////////////////////////
 /// Constructors/Destructors ///
@@ -113,6 +113,10 @@ CPPMat::Matrix& CPPMat::Matrix::operator=(const Matrix& src) {
     return *this;
 }
 
+double CPPMat::Matrix::operator()(int row, int col) const {
+    return this->valueAt(row, col);
+}
+
 CPPMat::Matrix& CPPMat::Matrix::operator*(const Matrix& m) const {
     if (m_cols != m.m_rows) {
         std::cerr << "Matrix multiplication error: The columns in the first operand must equal the rows in the second operand." << std::endl
@@ -182,10 +186,22 @@ bool CPPMat::Matrix::operator==(const Matrix & m) const {
     return true;
 }
 
+bool CPPMat::Matrix::operator!=(const Matrix& m) const {
+    return !operator==(m);
+}
+
 
 /////////////////
 /// Accessors ///
 /////////////////
+
+int CPPMat::Matrix::rows() const {
+    return m_rows;
+}
+
+int CPPMat::Matrix::cols() const {
+    return m_cols;
+}
 
 void CPPMat::Matrix::print() const {
     for (int i = 0; i < m_rows; i++) {
@@ -229,6 +245,10 @@ double* CPPMat::Matrix::colVector(int col) const {
         colVec[i] = m_array[i][col-1];
     }
     return colVec;
+}
+
+bool CPPMat::Matrix::isSquare() const {
+    return m_rows == m_cols;
 }
 
 CPPMat::Matrix& CPPMat::Matrix::transpose() const {
@@ -280,6 +300,11 @@ double CPPMat::Matrix::determinant() {
         return valueAt(1, 1);
 
     return detHelper(m_rows, 0, m_array);
+}
+
+// just an alias for determinant()
+double CPPMat::Matrix::det() {
+    return this->determinant();
 }
 
 

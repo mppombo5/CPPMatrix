@@ -1,11 +1,12 @@
 //
-// Created by Matthew Pombo on 11/9/19.
+// Created by Matthew Pombo on 12/27/19.
 //
 
-#ifndef MATRIX_MATRIX_H
-#define MATRIX_MATRIX_H
+#ifndef CPPMATRIX_CPPMATRIX_H
+#define CPPMATRIX_CPPMATRIX_H
 
 namespace CPPMat {
+
     class Matrix {
     public:
         // initialize a rows x cols matrix with all 0's
@@ -52,42 +53,7 @@ namespace CPPMat {
 
         double detHelper(int size, int offset, double** array);
     };
-}
-
-
-
-
-inline
-double CPPMat::Matrix::operator()(int row, int col) const {
-    return this->valueAt(row, col);
-}
-
-inline
-int CPPMat::Matrix::rows() const {
-    return m_rows;
-}
-
-inline
-int CPPMat::Matrix::cols() const {
-    return m_cols;
-}
-
-inline
-bool CPPMat::Matrix::isSquare() const {
-    return m_rows == m_cols;
-}
-
-// det(A) is just an alias for determinant(A)
-inline
-double CPPMat::Matrix::det() {
-    return this->determinant();
 
 }
 
-inline
-bool CPPMat::Matrix::operator!=(const Matrix& m) const {
-    return !operator==(m);
-}
-
-
-#endif //MATRIX_MATRIX_H
+#endif //CPPMATRIX_CPPMATRIX_H

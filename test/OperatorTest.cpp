@@ -4,8 +4,8 @@
 
 #include <iostream>
 #include <cassert>
+#include "../include/CPPMatrix.h"
 #include "MainTest.h"
-#include "../src/Matrix.h"
 
 void MultTest() {
     std::cout << "Starting multiplication tests..." << std::endl;

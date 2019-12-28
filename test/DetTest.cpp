@@ -2,7 +2,7 @@
 // Created by Matthew Pombo on 11/24/19.
 //
 
-#include "../src/Matrix.h"
+#include "../include/CPPMatrix.h"
 #include "MainTest.h"
 #include <iostream>
 #include <cassert>

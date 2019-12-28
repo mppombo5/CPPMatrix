@@ -3,6 +3,7 @@
 ## Table of Contents <!-- omit in toc -->
 
 - [Basics of a Matrix](#basics-of-a-matrix)
+- [Setting Up CPPMatrix](#setting-up-cppmatrix)
 - [The CPPMat Namespace](#the-cppmat-namespace)
 - [Declaration/Usage](#declarationusage)
 - [Next Steps](#next-steps)
@@ -19,6 +20,16 @@ Matrices are an immensely powerful object in the world of mathematics, and there
 - data fitting
 
 and many more. The goal of this library is to provide you with an easy way to perform many of these manipulations and calculations in C++.
+
+## Setting Up CPPMatrix
+
+Once you have [installed CPPMatrix](../../README.md#installation), all you need to do is include the main header file:
+
+```C++
+#include "CPPMatrix.h"
+```
+
+and you will be able to use all its features through the libraries that you have compiled.
 
 ## The CPPMat Namespace
 

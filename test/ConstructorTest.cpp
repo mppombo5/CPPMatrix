@@ -8,7 +8,7 @@
  * test files and using different constructors on them.
  */
 
-#include "../src/Matrix.h"
+#include "../include/CPPMatrix.h"
 #include "MainTest.h"
 #include <iostream>
 
