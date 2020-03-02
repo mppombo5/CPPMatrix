@@ -16,7 +16,7 @@ namespace CPPMat {
         Matrix(int rows, int cols, double** matrixArray);
 
         // easier constructor using a single array of doubles
-        Matrix(int rows, int cols, double* matrixarray);
+        Matrix(int rows, int cols, const double* matrixArray);
 
         Matrix(const Matrix& src);
         ~Matrix();
@@ -43,8 +43,8 @@ namespace CPPMat {
         double det();
 
         // Mutators
-        bool insert(int row, int col, double value);
-        bool swapRows(int row1, int row2);
+        void insert(int row, int col, double value);
+        void swapRows(int row1, int row2);
 
     private:
         int m_rows;
