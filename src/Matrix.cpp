@@ -295,8 +295,10 @@ double CPPMat::Matrix::detHelper(int size, int offset, double** array) {
     }
 
     // the lowest row will be on the top, so just swap them all back
+
+
     int j = 1;
-    while (j < (size + 1)) {
+    while (j < size) {
         swapRows((offset + j) + 1, offset + j);
         j++;
     }
