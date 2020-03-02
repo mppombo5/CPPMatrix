@@ -3,6 +3,8 @@ project(CPPMatrix)
 
 set(CMAKE_CXX_STANDARD 14)
 
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra")
+
 set(SRCFILES include/CPPMatrix.h src/Matrix.cpp)
 set (TESTFILES test/DetTest.cpp test/OperatorTest.cpp test/RCVectorsTest.cpp test/MainTest.cpp
         test/MainTest.h test/TransposeTest.cpp test/ConstructorTest.cpp)
