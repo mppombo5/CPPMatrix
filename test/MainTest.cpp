@@ -7,6 +7,7 @@ int main() {
     MultTest();
     AddTest();
     EqualTest();
+    ParenTest();
     RCVTest();
     TransposeTest();
     ConstructTest();

@@ -9,6 +9,7 @@ void DetTest();
 void MultTest();
 void AddTest();
 void EqualTest();
+void ParenTest();
 void RCVTest();
 void TransposeTest();
 void ConstructTest();

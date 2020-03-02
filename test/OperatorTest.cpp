@@ -6,6 +6,7 @@
 #include <cassert>
 #include "../include/CPPMatrix.h"
 #include "MainTest.h"
+using CPPMat::Matrix;
 
 void MultTest() {
     std::cout << "Starting multiplication tests..." << std::endl;
@@ -35,11 +36,25 @@ void MultTest() {
 
     CPPMat::Matrix D(7, 9);
     CPPMat::Matrix E(7, 9);
-    CPPMat::Matrix DE = D * E;
-    assert(DE.rows() == 1);
-    assert(DE.cols() == 1);
+    bool caughtMult1 = false;
+    try {
+        CPPMat::Matrix DE = D * E;
+    }
+    catch (std::invalid_argument&) {
+        caughtMult1 = true;
+    }
+    assert(caughtMult1);
 
-    std::cout << "All multiplication tests passed." << std::endl << std::endl;
+    bool caughtMult2 = false;
+    try {
+        CPPMat::Matrix F = CPPMat::Matrix(4, 5) * CPPMat::Matrix(6, 4);
+    }
+    catch (std::invalid_argument&) {
+        caughtMult2 = true;
+    }
+    assert(caughtMult2);
+
+    std::cout << "All multiplication tests passed." << "\n\n";
 }
 
 void AddTest() {
@@ -82,10 +97,25 @@ void AddTest() {
     double Erow2[3] = { 1, 1, 1 };
     double* Erows[] = { Erow1, Erow2 };
     CPPMat::Matrix E(2, 3, Erows);
-    C = A + E;
-    assert(C.rows() == 1 && C.cols() == 1 && C(1, 1) == 0);
+    bool caughtIA1 = false;
+    try {
+        C = A + E;
+    }
+    catch (std::invalid_argument&) {
+        caughtIA1 = true;
+    }
+    assert(caughtIA1);
 
-    std::cout << "All addition tests passed." << std::endl << std::endl;
+    bool caughtIA2 = false;
+    try {
+        Matrix F = Matrix(4, 4) + Matrix(4, 5);
+    }
+    catch (std::invalid_argument&) {
+        caughtIA2 = true;
+    }
+    assert(caughtIA2);
+
+    std::cout << "All addition tests passed." << "\n\n";
 }
 
 void EqualTest() {
@@ -117,5 +147,37 @@ void EqualTest() {
 
     assert(A != D && !(A == D));
 
-    std::cout << "Equivalence tests passed." << std::endl << std::endl;
+    std::cout << "Equivalence tests passed." << "\n\n";
+}
+
+void ParenTest() {
+    std::cout << "Starting matrix access tests..." << std::endl;
+
+    double Aarr[12] = {
+            1, 2, 3, 4,
+            5, 6, 7, 8,
+            9, 8, 7, 6
+    };
+    Matrix A(3, 4, Aarr);
+    double bad;
+    // BA = bad access
+    bool caughtBA1 = false;
+    try {
+        bad = A(2, 5);
+    }
+    catch (std::out_of_range&) {
+        caughtBA1 = true;
+    }
+    assert(caughtBA1);
+
+    bool caughtBA2 = false;
+    try {
+        bad = A(0, -1);
+    }
+    catch (std::out_of_range&) {
+        caughtBA2 = true;
+    }
+    assert(caughtBA2);
+
+    std::cout << "Access tests passed." << "\n\n";
 }

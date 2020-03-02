@@ -31,13 +31,43 @@ void RCVTest() {
         assert(rowVec[i] == ArowVec1[i]);
     }
 
-    double* invalidRowVec = A.rowVector(4);
-    double* invalidRowVec2 = A.rowVector(0);
-    assert(invalidRowVec == nullptr && invalidRowVec2 == nullptr);
+    double *invalidRowVec;
+    bool caughtRV1 = false;
+    try {
+        invalidRowVec = A.rowVector(4);
+    }
+    catch (std::out_of_range&) {
+        caughtRV1 = true;
+    }
+    assert(caughtRV1);
 
-    double* invalidColVec = A.colVector(5);
-    double* invalidColVec2 = A.colVector(0);
-    assert(invalidColVec == nullptr && invalidColVec2 == nullptr);
+    bool caughtRV2 = false;
+    try {
+        invalidRowVec = A.rowVector(0);
+    }
+    catch (std::out_of_range&) {
+        caughtRV2 = true;
+    }
+    assert(caughtRV2);
+
+    double* invalidColVec;
+    bool caughtCV1 = false;
+    try {
+        invalidColVec = A.colVector(5);
+    }
+    catch (std::out_of_range&) {
+        caughtCV1 = true;
+    }
+    assert(caughtCV1);
+
+    bool caughtCV2 = false;
+    try {
+        invalidColVec = A.colVector(0);
+    }
+    catch (std::out_of_range&) {
+        caughtCV2 = true;
+    }
+    assert(caughtCV2);
 
     std::cout << "All RCVector tests passed." << std::endl << std::endl;
 }

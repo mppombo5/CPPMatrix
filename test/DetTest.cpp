@@ -6,6 +6,7 @@
 #include "MainTest.h"
 #include <iostream>
 #include <cassert>
+using CPPMat::Matrix;
 
 void DetTest() {
     std::cout << "Starting determinant tests..." << std::endl;
@@ -63,6 +64,22 @@ void DetTest() {
             assert(D(i+1, j+1) == Drows[i][j]);
         }
     }
+
+    double badDet;
+    double Evals[3 * 4] = {
+            1, 2, 3, 4,
+            1, 2, 3, 4,
+            1, 2, 3, 4
+    };
+    Matrix E(3, 4, Evals);
+    bool badDetCaught1 = false;
+    try {
+        badDet = E.det();
+    }
+    catch (std::invalid_argument&) {
+        badDetCaught1 = true;
+    }
+    assert(badDetCaught1);
 
     std::cout << "All determinant tests passed." << std::endl << std::endl;
 }
