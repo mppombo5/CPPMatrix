@@ -34,6 +34,9 @@ void MultTest() {
     assert(AB(2, 2) == 2*2 + 3 * 3 + 4 * 4 + 5 * 5);
     assert(AB(1, 5) == 1*5 + 2 * 6 + 3 * 7 + 4 * 8);
 
+    A *= B;
+    assert(A == AB);
+
     CPPMat::Matrix D(7, 9);
     CPPMat::Matrix E(7, 9);
     bool caughtMult1 = false;
@@ -63,12 +66,15 @@ void MultTest() {
     };
     Matrix F(3, 3,Farr);
     double d1 = 3.6;
-    Matrix m1F = d1 * F;
+    Matrix d1F = d1 * F;
     for (int i = 0; i < 3; i++) {
         for (int j = 0; j < 3; j++) {
-            assert(m1F(i+1, j+1) == (d1 * F(i + 1, j + 1)));
+            assert(d1F(i + 1, j + 1) == (d1 * F(i + 1, j + 1)));
         }
     }
+
+    F *= d1;
+    assert(F == d1F);
 
     std::cout << "All multiplication tests passed." << "\n\n";
 }

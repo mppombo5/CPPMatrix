@@ -40,9 +40,10 @@ namespace CPPMat {
 
         // wack syntax for friend functions
         friend Matrix (::operator*(const Matrix& A, const Matrix& B));
-        //Matrix& operator*=(const Matrix& B);
+        Matrix& operator*=(const Matrix& B);
         friend Matrix (::operator*(double d, const Matrix& A));
         friend Matrix (::operator*(const Matrix& A, double d));
+        Matrix& operator*=(double d);
 
 
         // Accessors
