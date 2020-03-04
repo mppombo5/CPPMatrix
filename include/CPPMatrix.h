@@ -6,6 +6,10 @@
 #define CPPMATRIX_CPPMATRIX_H
 
 namespace CPPMat {
+    class Matrix;
+}
+
+namespace CPPMat {
 
     class Matrix {
     public:
