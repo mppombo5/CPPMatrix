@@ -54,6 +54,22 @@ void MultTest() {
     }
     assert(caughtMult2);
 
+
+    // test Matrix-double multiplication
+    double Farr[3 * 3] = {
+            1, 2, 3,
+            4, 5, 6,
+            7, 8, 9
+    };
+    Matrix F(3, 3,Farr);
+    double d1 = 3.6;
+    Matrix m1F = d1 * F;
+    for (int i = 0; i < 3; i++) {
+        for (int j = 0; j < 3; j++) {
+            assert(m1F(i+1, j+1) == (d1 * F(i + 1, j + 1)));
+        }
+    }
+
     std::cout << "All multiplication tests passed." << "\n\n";
 }
 

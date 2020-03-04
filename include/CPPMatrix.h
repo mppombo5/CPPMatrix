@@ -9,6 +9,11 @@ namespace CPPMat {
     class Matrix;
 }
 
+// must forward-declare friend functions
+CPPMat::Matrix  operator* (const CPPMat::Matrix& A, const CPPMat::Matrix& B);
+CPPMat::Matrix  operator* (double d, const CPPMat::Matrix& A);
+CPPMat::Matrix  operator* (const CPPMat::Matrix& A, double d);
+
 namespace CPPMat {
 
     class Matrix {
@@ -25,13 +30,20 @@ namespace CPPMat {
         Matrix(const Matrix& src);
         ~Matrix();
 
+
         // Operators
         Matrix& operator=(const Matrix& src);
         double operator()(int row, int col) const;
-        Matrix& operator*(const Matrix& m) const;
         Matrix& operator+(const Matrix& m) const;
         bool operator==(const Matrix& m) const;
         bool operator!=(const Matrix& m) const;
+
+        // wack syntax for friend functions
+        friend Matrix (::operator*(const Matrix& A, const Matrix& B));
+        //Matrix& operator*=(const Matrix& B);
+        friend Matrix (::operator*(double d, const Matrix& A));
+        friend Matrix (::operator*(const Matrix& A, double d));
+
 
         // Accessors
         int rows() const;
@@ -45,6 +57,7 @@ namespace CPPMat {
 
         double determinant();
         double det();
+
 
         // Mutators
         void insert(int row, int col, double value);

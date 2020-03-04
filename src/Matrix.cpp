@@ -7,6 +7,7 @@
 #include <exception>
 #include <sstream>
 #include "../include/CPPMatrix.h"
+using CPPMat::Matrix;
 
 ////////////////////////////////
 /// Constructors/Destructors ///
@@ -130,42 +131,6 @@ double CPPMat::Matrix::operator()(int row, int col) const {
     return this->valueAt(row, col);
 }
 
-CPPMat::Matrix& CPPMat::Matrix::operator*(const Matrix& m) const {
-    if (m_cols != m.m_rows) {
-        std::stringstream err;
-        err << "Matrix multiplication error: columns in first operand must equal rows in the second.\n"
-            << "Received bad matrix dimensions [(" << m_rows << " x " << m_cols << ") * ("
-            << m.m_rows << " x " << m.m_cols << ")].";
-        throw std::invalid_argument(err.str());
-    }
-
-    int newRows = m_rows;
-    int newCols = m.m_cols;
-    int commonVal = m_cols;
-    auto** newArr = new double*[newRows];
-
-    // preemptively make an array of column vectors to save on space and accesses
-    auto** columnVectors = new double*[m.m_cols];
-    for (int i = 0; i < m.m_cols; i++) {
-        columnVectors[i] = m.colVector(i+1);
-    }
-
-    for (int i = 0; i < newRows; i++) {
-        double* rowVec = rowVector(i+1);
-        newArr[i] = new double[newCols];
-        for (int j = 0; j < newCols; j++) {
-            double entry = 0;
-            for (int k = 0; k < commonVal; k++) {
-                entry += (rowVec[k] * columnVectors[j][k]);
-            }
-            newArr[i][j] = entry;
-        }
-    }
-
-    auto* C = new Matrix(newRows, newCols, newArr);
-    return *C;
-}
-
 CPPMat::Matrix& CPPMat::Matrix::operator+(const Matrix& m) const {
     if (m_rows != m.m_rows || m_cols != m.m_cols) {
         std::stringstream err;
@@ -203,6 +168,78 @@ bool CPPMat::Matrix::operator==(const Matrix & m) const {
 
 bool CPPMat::Matrix::operator!=(const Matrix& m) const {
     return !operator==(m);
+}
+
+
+// friend functions
+CPPMat::Matrix operator*(const Matrix& A, const Matrix& B) {
+    if (A.m_cols != B.m_rows) {
+        std::stringstream err;
+        err << "Matrix multiplication error: columns in first operand must equal rows in the second.\n"
+            << "Received bad matrix dimensions [(" << A.m_rows << " x " << A.m_cols << ") * ("
+            << B.m_rows << " x " << B.m_cols << ")].";
+        throw std::invalid_argument(err.str());
+    }
+
+    int newRows = A.m_rows;
+    int newCols = B.m_cols;
+    int commonVal = A.m_cols;
+    double newArr[newRows * newCols];
+
+    for (int i = 0; i < newRows; i++) {
+        for (int j = 0; j < newCols; j++) {
+            double entry = 0;
+            for (int k = 0; k < commonVal; k++) {
+                entry += (A.m_array[i][k] * B.m_array[k][j]);
+            }
+            newArr[(i*newCols) + j] = entry;
+        }
+    }
+
+    return CPPMat::Matrix(newRows, newCols, newArr);
+}
+
+// WIP
+/*Matrix& Matrix::operator*=(const Matrix &B) {
+    if (m_cols != B.m_cols) {
+        std::stringstream err;
+        err << "Matrix multiplication error: columns in first operand must equal rows in the second.\n"
+            << "Received bad matrix dimensions [(" << m_rows << " x " << m_cols << ") * ("
+            << B.m_rows << " x " << B.m_cols << ")].";
+        throw std::invalid_argument(err.str());
+    }
+
+    int newRows = m_rows;
+    int newCols = B.m_cols;
+    int commonVal = m_cols;
+    auto** newArr = new double*[newRows];
+
+    for (int i = 0; i < newRows; i++) {
+        newArr[i] = new double[newCols];
+        for (int j = 0; j < newCols; j++) {
+
+        }
+    }
+
+    return *this;
+}*/
+
+CPPMat::Matrix operator*(double d, const CPPMat::Matrix& A) {
+    int rows = A.m_rows;
+    int cols = A.m_cols;
+
+    double newArr[rows * cols];
+    for (int i = 0; i < rows; i++) {
+        for (int j = 0; j < cols; j++) {
+            newArr[(i*cols) + j] = A.m_array[i][j] * d;
+        }
+    }
+
+    return CPPMat::Matrix(rows, cols, newArr);
+}
+
+CPPMat::Matrix operator*(const CPPMat::Matrix& A, double d) {
+    return d * A;
 }
 
 
