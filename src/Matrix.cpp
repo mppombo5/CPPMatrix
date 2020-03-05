@@ -26,7 +26,7 @@ bool initialize(int rows, int cols, int* targetRows, int* targetCols) {
 CPPMat::Matrix::Matrix(int rows, int cols) {
     if (!initialize(rows, cols, &m_rows, &m_cols)) {
         std::stringstream err;
-        err << "Invalid dimensions passed to Matrix constructor in file " << __FILE__ << " at line " << __LINE__ << ":\n"
+        err << "Invalid dimensions passed to Matrix constructor:\n"
             << "'rows' and 'cols' must be greater than 0; received [rows = " << rows << ", cols = " << cols << "].";
         throw std::invalid_argument(err.str());
     }
@@ -42,7 +42,7 @@ CPPMat::Matrix::Matrix(int rows, int cols) {
 CPPMat::Matrix::Matrix(int rows, int cols, double** matrixArray) {
     if (!initialize(rows, cols, &m_rows, &m_cols)) {
         std::stringstream err;
-        err << "Invalid dimensions passed to Matrix constructor in file " << __FILE__ << " at line " << __LINE__ << ":\n"
+        err << "Invalid dimensions passed to Matrix constructor:\n"
             << "'rows' and 'cols' must be greater than 0; received [rows = " << rows << ", cols = " << cols << "].";
         throw std::invalid_argument(err.str());
     }
@@ -58,7 +58,7 @@ CPPMat::Matrix::Matrix(int rows, int cols, double** matrixArray) {
 CPPMat::Matrix::Matrix(int rows, int cols, const double* matrixArray) {
     if (!initialize(rows, cols, &m_rows, &m_cols)) {
         std::stringstream err;
-        err << "Invalid dimensions passed to Matrix constructor in file " << __FILE__ << " at line " << __LINE__ << ":\n"
+        err << "Invalid dimensions passed to Matrix constructor:\n"
             << "'rows' and 'cols' must be greater than 0; received [rows = " << rows << ", cols = " << cols << "].";
         throw std::invalid_argument(err.str());
     }
@@ -152,7 +152,7 @@ bool CPPMat::Matrix::operator!=(const Matrix& m) const {
 CPPMat::Matrix operator*(const CPPMat::Matrix& A, const CPPMat::Matrix& B) {
     if (A.m_cols != B.m_rows) {
         std::stringstream err;
-        err << "Matrix multiplication error in file " << __FILE__ << " at line " << __LINE__ << ": columns in first operand must equal rows in the second.\n"
+        err << "Matrix multiplication error: columns in first operand must equal rows in the second.\n"
             << "Received bad matrix dimensions [(" << A.m_rows << " x " << A.m_cols << ") * ("
             << B.m_rows << " x " << B.m_cols << ")].";
         throw std::invalid_argument(err.str());
@@ -179,7 +179,7 @@ CPPMat::Matrix operator*(const CPPMat::Matrix& A, const CPPMat::Matrix& B) {
 CPPMat::Matrix& CPPMat::Matrix::operator*=(const Matrix &B) {
     if (m_cols != B.m_rows) {
         std::stringstream err;
-        err << "Matrix multiplication error in file " << __FILE__ << " at line " << __LINE__ << ": columns in first operand must equal rows in the second.\n"
+        err << "Matrix multiplication error: columns in first operand must equal rows in the second.\n"
             << "Received bad matrix dimensions [(" << m_rows << " x " << m_cols << ") * ("
             << B.m_rows << " x " << B.m_cols << ")].";
         throw std::invalid_argument(err.str());
@@ -244,7 +244,7 @@ CPPMat::Matrix& CPPMat::Matrix::operator*=(double d) {
 CPPMat::Matrix operator+(const CPPMat::Matrix& A, const CPPMat::Matrix& B) {
     if (A.m_rows != B.m_rows || A.m_cols != B.m_cols) {
         std::stringstream err;
-        err << "Matrix addition error in file " << __FILE__ << " at line " << __LINE__ << ": operands must have the same dimensions.\n"
+        err << "Matrix addition error: operands must have the same dimensions.\n"
             << "Received bad matrix dimensions [(" << A.m_rows << " x " << A.m_cols << ") + ("
             << B.m_rows << " x " << B.m_cols << ")].";
         throw std::invalid_argument(err.str());
@@ -266,7 +266,7 @@ CPPMat::Matrix operator+(const CPPMat::Matrix& A, const CPPMat::Matrix& B) {
 CPPMat::Matrix& CPPMat::Matrix::operator+=(const Matrix& B) {
     if (m_rows != B.m_rows || m_cols != B.m_cols) {
         std::stringstream err;
-        err << "Matrix addition error in file " << __FILE__ << " at line " << __LINE__ << ": operands must have the same dimensions.\n"
+        err << "Matrix addition error: operands must have the same dimensions.\n"
             << "Received bad matrix dimensions [(" << m_rows << " x " << m_cols << ") + ("
             << B.m_rows << " x " << B.m_cols << ")].";
         throw std::invalid_argument(err.str());
@@ -346,7 +346,7 @@ void CPPMat::Matrix::print() const {
 double CPPMat::Matrix::valueAt(int row, int col) const {
     if (row < 1 || row > m_rows || col < 1 || col > m_cols) {
         std::stringstream err;
-        err << "Bad matrix access in file " << __FILE__ << " at line " << __LINE__ << ":\n"
+        err << "Bad matrix access:\n"
             << "attempted access to element (" << row << ", " << col <<") in (" << m_rows << " x " << m_cols <<") matrix.";
         throw std::out_of_range(err.str());
     }
@@ -359,7 +359,7 @@ double CPPMat::Matrix::valueAt(int row, int col) const {
 double* CPPMat::Matrix::rowVector(int row) const {
     if (row < 1 || row > m_rows) {
         std::stringstream err;
-        err << "Bad matrix row vector access in file " << __FILE__ << " at line " << __LINE__ << ":\n"
+        err << "Bad matrix row vector access:\n"
             << "attempted access to row " << row << " in matrix with " << m_rows << " rows.";
         throw std::out_of_range(err.str());
     }
@@ -373,7 +373,7 @@ double* CPPMat::Matrix::rowVector(int row) const {
 double* CPPMat::Matrix::colVector(int col) const {
     if (col < 1 || col > m_cols) {
         std::stringstream err;
-        err << "Bad matrix column vector access in file " << __FILE__ << " at line " << __LINE__ << ":\n"
+        err << "Bad matrix column vector access:\n"
             << "attempted access to column " << col << " in matrix with " << m_cols << " columns.";
         throw std::out_of_range(err.str());
     }
@@ -433,7 +433,7 @@ double CPPMat::Matrix::detHelper(int size, int offset, double** array) {
 double CPPMat::Matrix::determinant() {
     if (!isSquare()) {
         std::stringstream err;
-        err << "Attempted determinant calculation of non-square matrix in file " << __FILE__ << " at line " << __LINE__ << ":\n"
+        err << "Attempted determinant calculation of non-square matrix:\n"
             << "expected (n x n) matrix, received (" << m_rows << " x " << m_cols << ").";
 
         throw std::invalid_argument(err.str());
@@ -460,7 +460,7 @@ double CPPMat::Matrix::det() {
 void CPPMat::Matrix::insert(int row, int col, double value) {
     if (row > m_rows || row < 1 || col > m_cols || col < 1) {
         std::stringstream err;
-        err << "Bad insertion in file " << __FILE__ << " at line " << __LINE__ << ":\n"
+        err << "Bad insertion to matrix:\n"
             << "invalid argument(s) in [row = " << row << ", col = " << col << "] to (" << m_rows << " x "
             << m_cols << ") matrix.";
 
@@ -474,7 +474,7 @@ void CPPMat::Matrix::insert(int row, int col, double value) {
 void CPPMat::Matrix::swapRows(int row1, int row2) {
     if (row1 < 1 || row1 > m_rows || row2 < 1 || row2 > m_rows) {
         std::stringstream err;
-        err << "Bad row swap in file " << __FILE__ << " at line " << __LINE__ << ":\n"
+        err << "Bad matrix row swap:\n"
             << "invalid argument(s) in  [row1 = " << row1 << ", row2 = " << row2 << "] to matrix with " << m_rows << " rows.";
 
         throw std::invalid_argument(err.str());
