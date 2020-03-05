@@ -4,10 +4,9 @@
 
 #include <iostream>
 #include <string>
-#include <exception>
+#include <stdexcept>
 #include <sstream>
 #include "../include/CPPMatrix.h"
-using CPPMat::Matrix;
 
 ////////////////////////////////
 /// Constructors/Destructors ///
@@ -131,26 +130,6 @@ double CPPMat::Matrix::operator()(int row, int col) const {
     return this->valueAt(row, col);
 }
 
-CPPMat::Matrix& CPPMat::Matrix::operator+(const Matrix& m) const {
-    if (m_rows != m.m_rows || m_cols != m.m_cols) {
-        std::stringstream err;
-        err << "Matrix addition error in file " << __FILE__ << " at line " << __LINE__ << ": operands must have the same dimensions.\n"
-            << "Received bad matrix dimensions [(" << m_rows << " x " << m_cols << ") + ("
-            << m.m_rows << " x " << m.m_cols << ")].";
-        throw std::invalid_argument(err.str());
-    }
-
-    auto** newArr = new double*[m_rows];
-    for (int i = 0; i < m_rows; i++) {
-        newArr[i] = new double[m_cols];
-        for (int j = 0; j < m_cols; j++) {
-            newArr[i][j] = m_array[i][j] + m.m_array[i][j];
-        }
-    }
-    auto* A = new Matrix(m_rows, m_cols, newArr);
-    return *A;
-}
-
 bool CPPMat::Matrix::operator==(const Matrix & m) const {
     if (m_rows != m.m_rows || m_cols != m.m_cols) {
         return false;
@@ -170,9 +149,7 @@ bool CPPMat::Matrix::operator!=(const Matrix& m) const {
     return !operator==(m);
 }
 
-
-// friend functions
-CPPMat::Matrix operator*(const Matrix& A, const Matrix& B) {
+CPPMat::Matrix operator*(const CPPMat::Matrix& A, const CPPMat::Matrix& B) {
     if (A.m_cols != B.m_rows) {
         std::stringstream err;
         err << "Matrix multiplication error in file " << __FILE__ << " at line " << __LINE__ << ": columns in first operand must equal rows in the second.\n"
@@ -199,7 +176,7 @@ CPPMat::Matrix operator*(const Matrix& A, const Matrix& B) {
     return CPPMat::Matrix(newRows, newCols, newArr);
 }
 
-Matrix& Matrix::operator*=(const Matrix &B) {
+CPPMat::Matrix& CPPMat::Matrix::operator*=(const Matrix &B) {
     if (m_cols != B.m_rows) {
         std::stringstream err;
         err << "Matrix multiplication error in file " << __FILE__ << " at line " << __LINE__ << ": columns in first operand must equal rows in the second.\n"
@@ -250,14 +227,94 @@ CPPMat::Matrix operator*(double d, const CPPMat::Matrix& A) {
     return CPPMat::Matrix(rows, cols, newArr);
 }
 
-Matrix operator*(const CPPMat::Matrix& A, double d) {
+CPPMat::Matrix operator*(const CPPMat::Matrix& A, double d) {
     return d * A;
 }
 
-Matrix& Matrix::operator*=(double d) {
+CPPMat::Matrix& CPPMat::Matrix::operator*=(double d) {
     for (int i = 0; i < m_rows; i++) {
         for (int j = 0; j < m_cols; j++) {
             m_array[i][j] *= d;
+        }
+    }
+
+    return *this;
+}
+
+CPPMat::Matrix operator+(const CPPMat::Matrix& A, const CPPMat::Matrix& B) {
+    if (A.m_rows != B.m_rows || A.m_cols != B.m_cols) {
+        std::stringstream err;
+        err << "Matrix addition error in file " << __FILE__ << " at line " << __LINE__ << ": operands must have the same dimensions.\n"
+            << "Received bad matrix dimensions [(" << A.m_rows << " x " << A.m_cols << ") + ("
+            << B.m_rows << " x " << B.m_cols << ")].";
+        throw std::invalid_argument(err.str());
+    }
+
+    int newRows = A.m_rows;
+    int newCols = A.m_cols;
+    double newArr[newRows * newCols];
+
+    for (int i = 0; i < newRows; i++) {
+        for (int j = 0; j < newCols; j++) {
+            newArr[(i*newCols) + j] = A.m_array[i][j] + B.m_array[i][j];
+        }
+    }
+
+    return CPPMat::Matrix(newRows, newCols, newArr);
+}
+
+CPPMat::Matrix& CPPMat::Matrix::operator+=(const Matrix& B) {
+    if (m_rows != B.m_rows || m_cols != B.m_cols) {
+        std::stringstream err;
+        err << "Matrix addition error in file " << __FILE__ << " at line " << __LINE__ << ": operands must have the same dimensions.\n"
+            << "Received bad matrix dimensions [(" << m_rows << " x " << m_cols << ") + ("
+            << B.m_rows << " x " << B.m_cols << ")].";
+        throw std::invalid_argument(err.str());
+    }
+
+    for (int i = 0; i < m_rows; i++) {
+        for (int j = 0; j < m_cols; j++) {
+            m_array[i][j] += B.m_array[i][j];
+        }
+    }
+
+    return *this;
+}
+
+CPPMat::Matrix operator-(const CPPMat::Matrix& A, const CPPMat::Matrix& B) {
+    if (A.m_rows != B.m_rows || A.m_cols != B.m_cols) {
+        std::stringstream err;
+        err << "Matrix subtraction error: operands must have the same dimensions.\n"
+            << "Received bad matrix dimensions [(" << A.m_rows << " x " << A.m_cols << ") - ("
+            << B.m_rows << " x " << B.m_cols << ")].";
+        throw std::invalid_argument(err.str());
+    }
+
+    int newRows = A.m_rows;
+    int newCols = A.m_cols;
+    double newArr[newRows * newCols];
+
+    for (int i = 0; i < newRows; i++) {
+        for (int j = 0; j < newCols; j++) {
+            newArr[(i*newCols) + j] = A.m_array[i][j] - B.m_array[i][j];
+        }
+    }
+
+    return CPPMat::Matrix(newRows, newCols, newArr);
+}
+
+CPPMat::Matrix& CPPMat::Matrix::operator-=(const Matrix& B) {
+    if (m_rows != B.m_rows || m_cols != B.m_cols) {
+        std::stringstream err;
+        err << "Matrix subtraction error: operands must have the same dimensions.\n"
+            << "Received bad matrix dimensions [(" << m_rows << " x " << m_cols << ") - ("
+            << B.m_rows << " x " << B.m_cols << ")].";
+        throw std::invalid_argument(err.str());
+    }
+
+    for (int i = 0; i < m_rows; i++) {
+        for (int j = 0; j < m_cols; j++) {
+            m_array[i][j] -= B.m_array[i][j];
         }
     }
 

@@ -137,6 +137,33 @@ void AddTest() {
     }
     assert(caughtIA2);
 
+    Matrix Acopy = A;
+    A += D;
+    assert(A == C);
+
+    // I figure it's valid to test subtraction here as well.
+    A -= D;
+    assert(A == Acopy);
+
+    double Garr[2*2] = {
+            5, 6,
+            7, 8
+    };
+    Matrix G(2, 2, Garr);
+
+    double Harr[2*2] = {
+            1, 2,
+            3, 4
+    };
+    Matrix H(2, 2, Harr);
+
+    Matrix HfromG = G - H;
+    for (int i = 0; i < 2; i++) {
+        for (int j = 0; j < 2; j++) {
+            assert(HfromG(i+1, j+1) == 4);
+        }
+    }
+
     std::cout << "All addition tests passed." << "\n\n";
 }
 
