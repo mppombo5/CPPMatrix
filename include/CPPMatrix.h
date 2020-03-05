@@ -5,16 +5,21 @@
 #ifndef CPPMATRIX_CPPMATRIX_H
 #define CPPMATRIX_CPPMATRIX_H
 
+// needed to forward-declare ostream for << operator
+#include <iosfwd>
+
 namespace CPPMat {
     class Matrix;
 }
 
 // must forward-declare friend functions
-CPPMat::Matrix operator*(const CPPMat::Matrix& A, const CPPMat::Matrix& B);
-CPPMat::Matrix operator*(double d, const CPPMat::Matrix& A);
-CPPMat::Matrix operator*(const CPPMat::Matrix& A, double d);
-CPPMat::Matrix operator+(const CPPMat::Matrix& A, const CPPMat::Matrix& B);
-CPPMat::Matrix operator-(const CPPMat::Matrix& A, const CPPMat::Matrix& B);
+CPPMat::Matrix operator* (const CPPMat::Matrix& A, const CPPMat::Matrix& B);
+CPPMat::Matrix operator* (double d, const CPPMat::Matrix& A);
+CPPMat::Matrix operator* (const CPPMat::Matrix& A, double d);
+CPPMat::Matrix operator+ (const CPPMat::Matrix& A, const CPPMat::Matrix& B);
+CPPMat::Matrix operator- (const CPPMat::Matrix& A, const CPPMat::Matrix& B);
+
+std::ostream&  operator<<(std::ostream& os, const CPPMat::Matrix& A);
 
 namespace CPPMat {
 
@@ -34,14 +39,14 @@ namespace CPPMat {
 
 
         // Operators
-        Matrix& operator=(const Matrix& src);
+        Matrix& operator= (const Matrix& src);
         Matrix& operator*=(const Matrix& B);
         Matrix& operator*=(double d);
         Matrix& operator+=(const Matrix& B);
         Matrix& operator-=(const Matrix& B);
-        bool operator==(const Matrix& m) const;
-        bool operator!=(const Matrix& m) const;
-        double operator()(int row, int col) const;
+        bool    operator==(const Matrix& m) const;
+        bool    operator!=(const Matrix& m) const;
+        double  operator()(int row, int col) const;
 
         // wack syntax for friend functions
         friend Matrix (::operator*(const Matrix& A, const Matrix& B));
@@ -49,6 +54,8 @@ namespace CPPMat {
         friend Matrix (::operator*(const Matrix& A, double d));
         friend Matrix (::operator+(const Matrix& A, const Matrix& B));
         friend Matrix (::operator-(const Matrix& A, const Matrix& B));
+
+        friend std::ostream& (::operator<<(std::ostream& os, const Matrix& A));
 
 
         // Accessors

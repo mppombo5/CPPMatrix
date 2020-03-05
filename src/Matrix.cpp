@@ -3,7 +3,7 @@
 //
 
 #include <iostream>
-#include <string>
+//#include <string>
 #include <stdexcept>
 #include <sstream>
 #include "../include/CPPMatrix.h"
@@ -319,6 +319,20 @@ CPPMat::Matrix& CPPMat::Matrix::operator-=(const Matrix& B) {
     }
 
     return *this;
+}
+
+std::ostream& operator<<(std::ostream& os, const CPPMat::Matrix& A) {
+    for (int i = 0; i < A.m_rows; i++) {
+        for (int j = 0; j < A.m_cols; j++) {
+            os << A.m_array[i][j];
+            if (j != A.m_cols-1) {
+                os << '\t';
+            }
+        }
+        os << std::endl;
+    }
+
+    return os;
 }
 
 
