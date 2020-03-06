@@ -14,7 +14,7 @@ namespace CPPMat {
 
 // must forward-declare friend functions
 CPPMat::Matrix operator* (const CPPMat::Matrix& A, const CPPMat::Matrix& B);
-CPPMat::Matrix operator* (double d, const CPPMat::Matrix& A);
+CPPMat::Matrix operator* (double d,                const CPPMat::Matrix& A);
 CPPMat::Matrix operator* (const CPPMat::Matrix& A, double d);
 CPPMat::Matrix operator+ (const CPPMat::Matrix& A, const CPPMat::Matrix& B);
 CPPMat::Matrix operator- (const CPPMat::Matrix& A, const CPPMat::Matrix& B);
@@ -50,7 +50,7 @@ namespace CPPMat {
 
         // wack syntax for friend functions
         friend Matrix (::operator*(const Matrix& A, const Matrix& B));
-        friend Matrix (::operator*(double d, const Matrix& A));
+        friend Matrix (::operator*(double d,        const Matrix& A));
         friend Matrix (::operator*(const Matrix& A, double d));
         friend Matrix (::operator+(const Matrix& A, const Matrix& B));
         friend Matrix (::operator-(const Matrix& A, const Matrix& B));
@@ -66,7 +66,7 @@ namespace CPPMat {
         double* colVector(int col) const;
         bool isSquare() const;
         void print() const;
-        Matrix& transpose() const;
+        Matrix transpose() const;
 
         double determinant();
         double det();

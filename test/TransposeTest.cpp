@@ -6,6 +6,7 @@
 #include "MainTest.h"
 #include <iostream>
 #include <cassert>
+using CPPMat::Matrix;
 
 void TransposeTest() {
     std::cout << "Starting transpose tests..." << std::endl;
@@ -40,6 +41,28 @@ void TransposeTest() {
     for (int i = 0; i < AT.rows(); i++) {
         for (int j = 0; j < AT.cols(); j++) {
             assert(AT(i+1, j+1) == ATrows[i][j]);
+        }
+    }
+
+    double Barr[4 * 4] = {
+            1,  2,  3,  4,
+            5,  6,  7,  8,
+            9,  10, 11, 12,
+            13, 14, 15, 16
+    };
+    Matrix B(4, 4, Barr);
+
+    double BTarr[4 * 4] = {
+            1, 5, 9, 13,
+            2, 6, 10, 14,
+            3, 7, 11, 15,
+            4, 8, 12, 16
+    };
+    Matrix BT = B.transpose();
+
+    for (int i = 0; i < 4; i++) {
+        for (int j = 0; j < 4; j++) {
+            assert(BT(i+1, j+1) == BTarr[i*4 + j]);
         }
     }
 

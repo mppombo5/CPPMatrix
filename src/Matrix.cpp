@@ -402,14 +402,15 @@ bool CPPMat::Matrix::isSquare() const {
     return m_rows == m_cols;
 }
 
-CPPMat::Matrix& CPPMat::Matrix::transpose() const {
-    auto** tArr = new double*[m_cols];
-    for (int i = 0; i < m_cols; i++) {
-        tArr[i] = colVector(i+1);
+CPPMat::Matrix CPPMat::Matrix::transpose() const {
+    double newArr[m_rows * m_cols];
+    for (int i = 0; i < m_rows; i++) {
+        for (int j = 0; j < m_cols; j++) {
+            newArr[(j*m_rows) + i] = m_array[i][j];
+        }
     }
 
-    auto* T = new Matrix(m_cols, m_rows, tArr);
-    return *T;
+    return Matrix(m_cols, m_rows, newArr);
 }
 
 double CPPMat::Matrix::detHelper(int size, int offset, double** array) {
@@ -420,7 +421,8 @@ double CPPMat::Matrix::detHelper(int size, int offset, double** array) {
          * c d ;
          * returns ad - bc
          */
-        return ((array[offset][offset]*array[offset+1][offset+1]) - (array[offset][offset+1]*array[offset+1][offset]));
+        return ((array[offset][offset] * array[offset+1][offset+1])
+              - (array[offset][offset+1] * array[offset+1][offset]));
     }
 
     double determinant = 0;
@@ -434,8 +436,6 @@ double CPPMat::Matrix::detHelper(int size, int offset, double** array) {
     }
 
     // the lowest row will be on the top, so just swap them all back
-
-
     int j = 1;
     while (j < size) {
         swapRows((offset + j) + 1, offset + j);
