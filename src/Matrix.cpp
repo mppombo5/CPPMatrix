@@ -161,7 +161,10 @@ CPPMat::Matrix operator*(const CPPMat::Matrix& A, const CPPMat::Matrix& B) {
     int newRows = A.m_rows;
     int newCols = B.m_cols;
     int commonVal = A.m_cols;
-    double newArr[newRows * newCols];
+    auto* newArr = new double[newRows * newCols];
+
+    // TODO: delete old line
+    //double newArr[newRows * newCols];
 
     for (int i = 0; i < newRows; i++) {
         for (int j = 0; j < newCols; j++) {
@@ -173,7 +176,12 @@ CPPMat::Matrix operator*(const CPPMat::Matrix& A, const CPPMat::Matrix& B) {
         }
     }
 
-    return CPPMat::Matrix(newRows, newCols, newArr);
+    CPPMat::Matrix result(newRows, newCols, newArr);
+    delete [] newArr;
+    return result;
+
+    // TODO: delete old
+    //return CPPMat::Matrix(newRows, newCols, newArr);
 }
 
 CPPMat::Matrix& CPPMat::Matrix::operator*=(const Matrix &B) {
@@ -216,15 +224,22 @@ CPPMat::Matrix& CPPMat::Matrix::operator*=(const Matrix &B) {
 CPPMat::Matrix operator*(double d, const CPPMat::Matrix& A) {
     int rows = A.m_rows;
     int cols = A.m_cols;
+    auto* newArr = new double[rows * cols];
 
-    double newArr[rows * cols];
+    // TODO: delete old
+    //double newArr[rows * cols];
     for (int i = 0; i < rows; i++) {
         for (int j = 0; j < cols; j++) {
             newArr[(i*cols) + j] = A.m_array[i][j] * d;
         }
     }
 
-    return CPPMat::Matrix(rows, cols, newArr);
+    CPPMat::Matrix result(rows, cols, newArr);
+    delete [] newArr;
+    return result;
+
+    // TODO: delete old
+    //return CPPMat::Matrix(rows, cols, newArr);
 }
 
 CPPMat::Matrix operator*(const CPPMat::Matrix& A, double d) {
@@ -252,7 +267,10 @@ CPPMat::Matrix operator+(const CPPMat::Matrix& A, const CPPMat::Matrix& B) {
 
     int newRows = A.m_rows;
     int newCols = A.m_cols;
-    double newArr[newRows * newCols];
+    auto* newArr = new double[newRows * newCols];
+
+    // TODO: delete old
+    //double newArr[newRows * newCols];
 
     for (int i = 0; i < newRows; i++) {
         for (int j = 0; j < newCols; j++) {
@@ -260,7 +278,11 @@ CPPMat::Matrix operator+(const CPPMat::Matrix& A, const CPPMat::Matrix& B) {
         }
     }
 
-    return CPPMat::Matrix(newRows, newCols, newArr);
+    CPPMat::Matrix result(newRows, newCols, newArr);
+    delete [] newArr;
+    return result;
+
+    //return CPPMat::Matrix(newRows, newCols, newArr);
 }
 
 CPPMat::Matrix& CPPMat::Matrix::operator+=(const Matrix& B) {
@@ -292,7 +314,10 @@ CPPMat::Matrix operator-(const CPPMat::Matrix& A, const CPPMat::Matrix& B) {
 
     int newRows = A.m_rows;
     int newCols = A.m_cols;
-    double newArr[newRows * newCols];
+    auto* newArr = new double[newRows * newCols];
+
+    // TODO: delete old
+    //double newArr[newRows * newCols];
 
     for (int i = 0; i < newRows; i++) {
         for (int j = 0; j < newCols; j++) {
@@ -300,7 +325,11 @@ CPPMat::Matrix operator-(const CPPMat::Matrix& A, const CPPMat::Matrix& B) {
         }
     }
 
-    return CPPMat::Matrix(newRows, newCols, newArr);
+    CPPMat::Matrix result(newRows, newCols, newArr);
+    delete [] newArr;
+    return result;
+
+    //return CPPMat::Matrix(newRows, newCols, newArr);
 }
 
 CPPMat::Matrix& CPPMat::Matrix::operator-=(const Matrix& B) {
