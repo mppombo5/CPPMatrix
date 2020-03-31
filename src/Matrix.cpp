@@ -432,14 +432,20 @@ bool CPPMat::Matrix::isSquare() const {
 }
 
 CPPMat::Matrix CPPMat::Matrix::transpose() const {
-    double newArr[m_rows * m_cols];
+    auto* newArr = new double[m_rows * m_cols];
+    // TODO: delete old
+    //double newArr[m_rows * m_cols];
     for (int i = 0; i < m_rows; i++) {
         for (int j = 0; j < m_cols; j++) {
             newArr[(j*m_rows) + i] = m_array[i][j];
         }
     }
 
-    return Matrix(m_cols, m_rows, newArr);
+    Matrix result(m_cols, m_rows, newArr);
+    delete [] newArr;
+    return result;
+
+    //return Matrix(m_cols, m_rows, newArr);
 }
 
 double CPPMat::Matrix::detHelper(int size, int offset, double** array) {
