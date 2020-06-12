@@ -207,9 +207,6 @@ cppmat::Matrix operator*(const cppmat::Matrix& A, const cppmat::Matrix& B) {
     int commonVal = A.m_cols;
     auto* newArr = new double[newRows * newCols];
 
-    // TODO: delete old line
-    //double newArr[newRows * newCols];
-
     for (int i = 0; i < newRows; i++) {
         for (int j = 0; j < newCols; j++) {
             double entry = 0;
@@ -223,9 +220,6 @@ cppmat::Matrix operator*(const cppmat::Matrix& A, const cppmat::Matrix& B) {
     cppmat::Matrix result(newRows, newCols, newArr);
     delete [] newArr;
     return result;
-
-    // TODO: delete old
-    //return cppmat::Matrix(newRows, newCols, newArr);
 }
 
 cppmat::Matrix& cppmat::Matrix::operator*=(const Matrix &B) {
@@ -270,8 +264,6 @@ cppmat::Matrix operator*(double d, const cppmat::Matrix& A) {
     int cols = A.m_cols;
     auto* newArr = new double[rows * cols];
 
-    // TODO: delete old
-    //double newArr[rows * cols];
     for (int i = 0; i < rows; i++) {
         for (int j = 0; j < cols; j++) {
             newArr[(i*cols) + j] = A.m_array[i][j] * d;
@@ -281,9 +273,6 @@ cppmat::Matrix operator*(double d, const cppmat::Matrix& A) {
     cppmat::Matrix result(rows, cols, newArr);
     delete [] newArr;
     return result;
-
-    // TODO: delete old
-    //return cppmat::Matrix(rows, cols, newArr);
 }
 
 cppmat::Matrix operator*(const cppmat::Matrix& A, double d) {
@@ -312,9 +301,6 @@ cppmat::Matrix operator+(const cppmat::Matrix& A, const cppmat::Matrix& B) {
     int newRows = A.m_rows;
     int newCols = A.m_cols;
     auto* newArr = new double[newRows * newCols];
-
-    // TODO: delete old
-    //double newArr[newRows * newCols];
 
     for (int i = 0; i < newRows; i++) {
         for (int j = 0; j < newCols; j++) {
@@ -359,9 +345,6 @@ cppmat::Matrix operator-(const cppmat::Matrix& A, const cppmat::Matrix& B) {
     int newRows = A.m_rows;
     int newCols = A.m_cols;
     auto* newArr = new double[newRows * newCols];
-
-    // TODO: delete old
-    //double newArr[newRows * newCols];
 
     for (int i = 0; i < newRows; i++) {
         for (int j = 0; j < newCols; j++) {
@@ -454,11 +437,6 @@ std::vector<double> cppmat::Matrix::rowVector(int row) const {
     // Construct a vector, treating pointers to the start and end
     // of the array as input iterators.
     std::vector<double> rowVec(m_array[row-1], m_array[row-1] + m_cols);
-
-    /*auto* rowVec = new double[m_cols];
-    for (int i = 0; i < m_cols; i++) {
-        rowVec[i] = m_array[row-1][i];
-    }*/
     return rowVec;
 }
 
@@ -477,11 +455,6 @@ std::vector<double> cppmat::Matrix::colVector(int col) const {
     for (int i = 0; i < m_rows; i++) {
         colVec[i] = m_array[i][col-1];
     }
-
-    /*auto* colVec = new double[m_rows];
-    for (int i = 0; i < m_rows; i++) {
-        colVec[i] = m_array[i][col-1];
-    }*/
     return colVec;
 }
 
@@ -491,8 +464,6 @@ bool cppmat::Matrix::isSquare() const {
 
 cppmat::Matrix cppmat::Matrix::transpose() const {
     auto* newArr = new double[m_rows * m_cols];
-    // TODO: delete old
-    //double newArr[m_rows * m_cols];
     for (int i = 0; i < m_rows; i++) {
         for (int j = 0; j < m_cols; j++) {
             newArr[(j*m_rows) + i] = m_array[i][j];
