@@ -3,7 +3,7 @@
 //
 
 #include <iostream>
-//#include <string>
+#include <vector>
 #include <stdexcept>
 #include <sstream>
 #include "../include/CPPMatrix.h"
@@ -443,31 +443,45 @@ double cppmat::Matrix::valueAt(int row, int col) const {
 
 // Functions to return an array containing a row or column vector with the elements in the argument's row or column
 
-double* cppmat::Matrix::rowVector(int row) const {
+std::vector<double> cppmat::Matrix::rowVector(int row) const {
     if (row < 1 || row > m_rows) {
         std::stringstream err;
         err << "Bad matrix row vector access:\n"
             << "attempted access to row " << row << " in matrix with " << m_rows << " rows.";
         throw std::out_of_range(err.str());
     }
-    auto* rowVec = new double[m_cols];
+
+    // Construct a vector, treating pointers to the start and end
+    // of the array as input iterators.
+    std::vector<double> rowVec(m_array[row-1], m_array[row-1] + m_cols);
+
+    /*auto* rowVec = new double[m_cols];
     for (int i = 0; i < m_cols; i++) {
         rowVec[i] = m_array[row-1][i];
-    }
+    }*/
     return rowVec;
 }
 
-double* cppmat::Matrix::colVector(int col) const {
+std::vector<double> cppmat::Matrix::colVector(int col) const {
     if (col < 1 || col > m_cols) {
         std::stringstream err;
         err << "Bad matrix column vector access:\n"
             << "attempted access to column " << col << " in matrix with " << m_cols << " columns.";
         throw std::out_of_range(err.str());
     }
-    auto* colVec = new double[m_rows];
+
+    std::vector<double> colVec(m_rows);
+
+    // We can't use the easy pointer-as-iterator method for this,
+    // since they're at different places in memory.
     for (int i = 0; i < m_rows; i++) {
         colVec[i] = m_array[i][col-1];
     }
+
+    /*auto* colVec = new double[m_rows];
+    for (int i = 0; i < m_rows; i++) {
+        colVec[i] = m_array[i][col-1];
+    }*/
     return colVec;
 }
 

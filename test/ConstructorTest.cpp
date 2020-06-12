@@ -11,6 +11,7 @@
 #include "../include/CPPMatrix.h"
 #include "MainTest.h"
 #include <iostream>
+#include <vector>
 #include <cassert>
 using cppmat::Matrix;
 
@@ -38,7 +39,7 @@ void ConstructTest() {
     cppmat::Matrix A(3, 4, Aarr);
 
     double colVec[3] = { 2, 3, 4 };
-    double* AcolVec1 = A.colVector(2);
+    std::vector<double> AcolVec1 = A.colVector(2);
     for (int i = 0; i < A.rows(); i++) {
         assert(colVec[i] == AcolVec1[i]);
     }

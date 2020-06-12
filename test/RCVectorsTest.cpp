@@ -7,6 +7,7 @@
 #include "../include/CPPMatrix.h"
 #include "MainTest.h"
 #include <iostream>
+#include <vector>
 #include <cassert>
 
 void RCVTest() {
@@ -20,18 +21,18 @@ void RCVTest() {
     cppmat::Matrix A(3, 4, arrA);
 
     double colVec[3] = { 2, 3, 4 };
-    double* AcolVec1 = A.colVector(2);
+    std::vector<double> AcolVec1 = A.colVector(2);
     for (int i = 0; i < A.rows(); i++) {
         assert(colVec[i] == AcolVec1[i]);
     }
 
     double rowVec[4] = { 2, 3, 4, 5 };
-    double* ArowVec1 = A.rowVector(2);
+    std::vector<double> ArowVec1 = A.rowVector(2);
     for (int i = 0; i < A.cols(); i++) {
         assert(rowVec[i] == ArowVec1[i]);
     }
 
-    double *invalidRowVec;
+    std::vector<double> invalidRowVec;
     bool caughtRV1 = false;
     try {
         invalidRowVec = A.rowVector(4);
@@ -50,7 +51,7 @@ void RCVTest() {
     }
     assert(caughtRV2);
 
-    double* invalidColVec;
+    std::vector<double> invalidColVec;
     bool caughtCV1 = false;
     try {
         invalidColVec = A.colVector(5);
