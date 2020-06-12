@@ -23,7 +23,9 @@ bool initialize(int rows, int cols, int* targetRows, int* targetCols) {
     return true;
 }
 
-CPPMat::Matrix::Matrix(int rows, int cols) {
+// Closest thing to a default constructor. Takes in number of rows and number
+// of columns, and initializes all entries to 0.
+cppmat::Matrix::Matrix(int rows, int cols) {
     if (!initialize(rows, cols, &m_rows, &m_cols)) {
         std::stringstream err;
         err << "Invalid dimensions passed to Matrix constructor:\n"
@@ -39,7 +41,8 @@ CPPMat::Matrix::Matrix(int rows, int cols) {
     }
 }
 
-CPPMat::Matrix::Matrix(int rows, int cols, double** matrixArray) {
+// Takes in a 2D array of doubles and initializes values according to said array.
+cppmat::Matrix::Matrix(int rows, int cols, double** matrixArray) {
     if (!initialize(rows, cols, &m_rows, &m_cols)) {
         std::stringstream err;
         err << "Invalid dimensions passed to Matrix constructor:\n"
@@ -47,6 +50,7 @@ CPPMat::Matrix::Matrix(int rows, int cols, double** matrixArray) {
         throw std::invalid_argument(err.str());
     }
 
+    // Initialize matrix values based on the 2D array.
     m_array = new double*[m_rows];
     for (int i = 0; i < m_rows; i++) {
         m_array[i] = new double[m_cols];
@@ -55,7 +59,9 @@ CPPMat::Matrix::Matrix(int rows, int cols, double** matrixArray) {
     }
 }
 
-CPPMat::Matrix::Matrix(int rows, int cols, const double* matrixArray) {
+// Slightly more user-friendly constructor, which only
+// uses a single array of doubles to initialize.
+cppmat::Matrix::Matrix(int rows, int cols, const double* matrixArray) {
     if (!initialize(rows, cols, &m_rows, &m_cols)) {
         std::stringstream err;
         err << "Invalid dimensions passed to Matrix constructor:\n"
@@ -65,6 +71,7 @@ CPPMat::Matrix::Matrix(int rows, int cols, const double* matrixArray) {
 
     m_array = new double*[m_rows];
 
+    // The logic here divides the single array into however many rows and columns the matrix has.
     int i = 0;
     while (i < m_rows) {
         m_array[i] = new double[m_cols];
@@ -77,7 +84,8 @@ CPPMat::Matrix::Matrix(int rows, int cols, const double* matrixArray) {
     }
 }
 
-CPPMat::Matrix::Matrix(const Matrix& src) {
+// Copy constructor.
+cppmat::Matrix::Matrix(const Matrix& src) {
     auto** newArr = new double*[src.m_rows];
     for (int i = 0; i < src.m_rows; i++) {
         newArr[i] = new double[src.m_cols];
@@ -91,19 +99,8 @@ CPPMat::Matrix::Matrix(const Matrix& src) {
     m_cols = src.m_cols;
 }
 
-CPPMat::Matrix::~Matrix() {
-    for (int i = 0; i < m_rows; i++)
-        delete [] m_array[i];
-
-    delete [] m_array;
-}
-
-
-/////////////////
-/// Operators ///
-/////////////////
-
-CPPMat::Matrix& CPPMat::Matrix::operator=(const Matrix& src) {
+// Copy assignment operator.
+cppmat::Matrix& cppmat::Matrix::operator=(const Matrix& src) {
     if (&src == this)
         return *this;
 
@@ -126,11 +123,58 @@ CPPMat::Matrix& CPPMat::Matrix::operator=(const Matrix& src) {
     return *this;
 }
 
-double CPPMat::Matrix::operator()(int row, int col) const {
+// Move constructor.
+cppmat::Matrix::Matrix(Matrix &&src) noexcept {
+    m_rows = src.m_rows;
+    m_cols = src.m_cols;
+    m_array = src.m_array;
+
+    // Have to free data from src to avoid multiple/duplicate memory freeing.
+    src.m_rows = 0;
+    src.m_cols = 0;
+    src.m_array = nullptr;
+}
+
+// Move assignment operator.
+cppmat::Matrix& cppmat::Matrix::operator=(Matrix&& src) noexcept {
+    if (this != &src) {
+        // Delete each array pointed to by each element in m_array. (2D array being freed.)
+        for (int i = 0; i < m_rows; i++) {
+            delete[] m_array[i];
+        }
+        delete[] m_array;
+
+        m_rows = src.m_rows;
+        m_cols = src.m_cols;
+        m_array = src.m_array;
+
+        // Free data from src to avoid duplicate memory freeing.
+        src.m_rows = 0;
+        src.m_cols = 0;
+        src.m_array = nullptr;
+    }
+
+    return *this;
+}
+
+// Basic destructor, just deletes dynamically allocated memory used by the matrix.
+cppmat::Matrix::~Matrix() {
+    for (int i = 0; i < m_rows; i++)
+        delete [] m_array[i];
+
+    delete [] m_array;
+}
+
+
+/////////////////
+/// Operators ///
+/////////////////
+
+double cppmat::Matrix::operator()(int row, int col) const {
     return this->valueAt(row, col);
 }
 
-bool CPPMat::Matrix::operator==(const Matrix & m) const {
+bool cppmat::Matrix::operator==(const Matrix & m) const {
     if (m_rows != m.m_rows || m_cols != m.m_cols) {
         return false;
     }
@@ -145,11 +189,11 @@ bool CPPMat::Matrix::operator==(const Matrix & m) const {
     return true;
 }
 
-bool CPPMat::Matrix::operator!=(const Matrix& m) const {
+bool cppmat::Matrix::operator!=(const Matrix& m) const {
     return !operator==(m);
 }
 
-CPPMat::Matrix operator*(const CPPMat::Matrix& A, const CPPMat::Matrix& B) {
+cppmat::Matrix operator*(const cppmat::Matrix& A, const cppmat::Matrix& B) {
     if (A.m_cols != B.m_rows) {
         std::stringstream err;
         err << "Matrix multiplication error: columns in first operand must equal rows in the second.\n"
@@ -176,15 +220,15 @@ CPPMat::Matrix operator*(const CPPMat::Matrix& A, const CPPMat::Matrix& B) {
         }
     }
 
-    CPPMat::Matrix result(newRows, newCols, newArr);
+    cppmat::Matrix result(newRows, newCols, newArr);
     delete [] newArr;
     return result;
 
     // TODO: delete old
-    //return CPPMat::Matrix(newRows, newCols, newArr);
+    //return cppmat::Matrix(newRows, newCols, newArr);
 }
 
-CPPMat::Matrix& CPPMat::Matrix::operator*=(const Matrix &B) {
+cppmat::Matrix& cppmat::Matrix::operator*=(const Matrix &B) {
     if (m_cols != B.m_rows) {
         std::stringstream err;
         err << "Matrix multiplication error: columns in first operand must equal rows in the second.\n"
@@ -221,7 +265,7 @@ CPPMat::Matrix& CPPMat::Matrix::operator*=(const Matrix &B) {
     return *this;
 }
 
-CPPMat::Matrix operator*(double d, const CPPMat::Matrix& A) {
+cppmat::Matrix operator*(double d, const cppmat::Matrix& A) {
     int rows = A.m_rows;
     int cols = A.m_cols;
     auto* newArr = new double[rows * cols];
@@ -234,19 +278,19 @@ CPPMat::Matrix operator*(double d, const CPPMat::Matrix& A) {
         }
     }
 
-    CPPMat::Matrix result(rows, cols, newArr);
+    cppmat::Matrix result(rows, cols, newArr);
     delete [] newArr;
     return result;
 
     // TODO: delete old
-    //return CPPMat::Matrix(rows, cols, newArr);
+    //return cppmat::Matrix(rows, cols, newArr);
 }
 
-CPPMat::Matrix operator*(const CPPMat::Matrix& A, double d) {
+cppmat::Matrix operator*(const cppmat::Matrix& A, double d) {
     return d * A;
 }
 
-CPPMat::Matrix& CPPMat::Matrix::operator*=(double d) {
+cppmat::Matrix& cppmat::Matrix::operator*=(double d) {
     for (int i = 0; i < m_rows; i++) {
         for (int j = 0; j < m_cols; j++) {
             m_array[i][j] *= d;
@@ -256,7 +300,7 @@ CPPMat::Matrix& CPPMat::Matrix::operator*=(double d) {
     return *this;
 }
 
-CPPMat::Matrix operator+(const CPPMat::Matrix& A, const CPPMat::Matrix& B) {
+cppmat::Matrix operator+(const cppmat::Matrix& A, const cppmat::Matrix& B) {
     if (A.m_rows != B.m_rows || A.m_cols != B.m_cols) {
         std::stringstream err;
         err << "Matrix addition error: operands must have the same dimensions.\n"
@@ -278,14 +322,14 @@ CPPMat::Matrix operator+(const CPPMat::Matrix& A, const CPPMat::Matrix& B) {
         }
     }
 
-    CPPMat::Matrix result(newRows, newCols, newArr);
+    cppmat::Matrix result(newRows, newCols, newArr);
     delete [] newArr;
     return result;
 
-    //return CPPMat::Matrix(newRows, newCols, newArr);
+    //return cppmat::Matrix(newRows, newCols, newArr);
 }
 
-CPPMat::Matrix& CPPMat::Matrix::operator+=(const Matrix& B) {
+cppmat::Matrix& cppmat::Matrix::operator+=(const Matrix& B) {
     if (m_rows != B.m_rows || m_cols != B.m_cols) {
         std::stringstream err;
         err << "Matrix addition error: operands must have the same dimensions.\n"
@@ -303,7 +347,7 @@ CPPMat::Matrix& CPPMat::Matrix::operator+=(const Matrix& B) {
     return *this;
 }
 
-CPPMat::Matrix operator-(const CPPMat::Matrix& A, const CPPMat::Matrix& B) {
+cppmat::Matrix operator-(const cppmat::Matrix& A, const cppmat::Matrix& B) {
     if (A.m_rows != B.m_rows || A.m_cols != B.m_cols) {
         std::stringstream err;
         err << "Matrix subtraction error: operands must have the same dimensions.\n"
@@ -325,14 +369,14 @@ CPPMat::Matrix operator-(const CPPMat::Matrix& A, const CPPMat::Matrix& B) {
         }
     }
 
-    CPPMat::Matrix result(newRows, newCols, newArr);
+    cppmat::Matrix result(newRows, newCols, newArr);
     delete [] newArr;
     return result;
 
-    //return CPPMat::Matrix(newRows, newCols, newArr);
+    //return cppmat::Matrix(newRows, newCols, newArr);
 }
 
-CPPMat::Matrix& CPPMat::Matrix::operator-=(const Matrix& B) {
+cppmat::Matrix& cppmat::Matrix::operator-=(const Matrix& B) {
     if (m_rows != B.m_rows || m_cols != B.m_cols) {
         std::stringstream err;
         err << "Matrix subtraction error: operands must have the same dimensions.\n"
@@ -350,7 +394,7 @@ CPPMat::Matrix& CPPMat::Matrix::operator-=(const Matrix& B) {
     return *this;
 }
 
-std::ostream& operator<<(std::ostream& os, const CPPMat::Matrix& A) {
+std::ostream& operator<<(std::ostream& os, const cppmat::Matrix& A) {
     for (int i = 0; i < A.m_rows; i++) {
         for (int j = 0; j < A.m_cols; j++) {
             os << A.m_array[i][j];
@@ -369,15 +413,15 @@ std::ostream& operator<<(std::ostream& os, const CPPMat::Matrix& A) {
 /// Accessors ///
 /////////////////
 
-int CPPMat::Matrix::rows() const {
+int cppmat::Matrix::rows() const {
     return m_rows;
 }
 
-int CPPMat::Matrix::cols() const {
+int cppmat::Matrix::cols() const {
     return m_cols;
 }
 
-void CPPMat::Matrix::print() const {
+void cppmat::Matrix::print() const {
     for (int i = 0; i < m_rows; i++) {
         for (int j = 0; j < m_cols; j++) {
             std::cout << m_array[i][j] << "\t";
@@ -386,7 +430,7 @@ void CPPMat::Matrix::print() const {
     }
 }
 
-double CPPMat::Matrix::valueAt(int row, int col) const {
+double cppmat::Matrix::valueAt(int row, int col) const {
     if (row < 1 || row > m_rows || col < 1 || col > m_cols) {
         std::stringstream err;
         err << "Bad matrix access:\n"
@@ -399,7 +443,7 @@ double CPPMat::Matrix::valueAt(int row, int col) const {
 
 // Functions to return an array containing a row or column vector with the elements in the argument's row or column
 
-double* CPPMat::Matrix::rowVector(int row) const {
+double* cppmat::Matrix::rowVector(int row) const {
     if (row < 1 || row > m_rows) {
         std::stringstream err;
         err << "Bad matrix row vector access:\n"
@@ -413,7 +457,7 @@ double* CPPMat::Matrix::rowVector(int row) const {
     return rowVec;
 }
 
-double* CPPMat::Matrix::colVector(int col) const {
+double* cppmat::Matrix::colVector(int col) const {
     if (col < 1 || col > m_cols) {
         std::stringstream err;
         err << "Bad matrix column vector access:\n"
@@ -427,11 +471,11 @@ double* CPPMat::Matrix::colVector(int col) const {
     return colVec;
 }
 
-bool CPPMat::Matrix::isSquare() const {
+bool cppmat::Matrix::isSquare() const {
     return m_rows == m_cols;
 }
 
-CPPMat::Matrix CPPMat::Matrix::transpose() const {
+cppmat::Matrix cppmat::Matrix::transpose() const {
     auto* newArr = new double[m_rows * m_cols];
     // TODO: delete old
     //double newArr[m_rows * m_cols];
@@ -448,7 +492,7 @@ CPPMat::Matrix CPPMat::Matrix::transpose() const {
     //return Matrix(m_cols, m_rows, newArr);
 }
 
-double CPPMat::Matrix::detHelper(int size, int offset, double** array) {
+double cppmat::Matrix::detHelper(int size, int offset, double** array) {
     if (size == 2) {
         /*
          * Matrix of the form:
@@ -479,7 +523,7 @@ double CPPMat::Matrix::detHelper(int size, int offset, double** array) {
     return determinant;
 }
 
-double CPPMat::Matrix::determinant() {
+double cppmat::Matrix::determinant() {
     if (!isSquare()) {
         std::stringstream err;
         err << "Attempted determinant calculation of non-square matrix:\n"
@@ -496,7 +540,7 @@ double CPPMat::Matrix::determinant() {
 }
 
 // just an alias for determinant()
-double CPPMat::Matrix::det() {
+double cppmat::Matrix::det() {
     return this->determinant();
 }
 
@@ -506,7 +550,7 @@ double CPPMat::Matrix::det() {
 ////////////////
 
 // inserts a value 'value' into into the matrix at row 'row,' column 'col'
-void CPPMat::Matrix::insert(int row, int col, double value) {
+void cppmat::Matrix::insert(int row, int col, double value) {
     if (row > m_rows || row < 1 || col > m_cols || col < 1) {
         std::stringstream err;
         err << "Bad insertion to matrix:\n"
@@ -520,7 +564,7 @@ void CPPMat::Matrix::insert(int row, int col, double value) {
 }
 
 // simply swaps two rows in a matrix
-void CPPMat::Matrix::swapRows(int row1, int row2) {
+void cppmat::Matrix::swapRows(int row1, int row2) {
     if (row1 < 1 || row1 > m_rows || row2 < 1 || row2 > m_rows) {
         std::stringstream err;
         err << "Bad matrix row swap:\n"

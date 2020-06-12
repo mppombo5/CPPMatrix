@@ -17,7 +17,7 @@ void RCVTest() {
     double Arow2[4] = { 2, 3, 4, 5 };
     double Arow3[4] = { 3, 4, 5, 6 };
     double* arrA[] = { Arow1, Arow2, Arow3 };
-    CPPMat::Matrix A(3, 4, arrA);
+    cppmat::Matrix A(3, 4, arrA);
 
     double colVec[3] = { 2, 3, 4 };
     double* AcolVec1 = A.colVector(2);

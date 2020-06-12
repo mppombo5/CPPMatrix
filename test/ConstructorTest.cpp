@@ -11,7 +11,8 @@
 #include "../include/CPPMatrix.h"
 #include "MainTest.h"
 #include <iostream>
-using CPPMat::Matrix;
+#include <cassert>
+using cppmat::Matrix;
 
 void ConstructTest() {
     std::cout << "Starting constructor tests..." << std::endl;
@@ -24,7 +25,7 @@ void ConstructTest() {
             5, 3, 7, 3, 1,
             2, 4, 7, 3, 1
     };
-    CPPMat::Matrix D(5, 5, Darr);
+    cppmat::Matrix D(5, 5, Darr);
     assert(D.det() == 420);
 
     // copy-paste from RCVector tests
@@ -34,7 +35,7 @@ void ConstructTest() {
             3, 4, 5, 6
     };
 
-    CPPMat::Matrix A(3, 4, Aarr);
+    cppmat::Matrix A(3, 4, Aarr);
 
     double colVec[3] = { 2, 3, 4 };
     double* AcolVec1 = A.colVector(2);
@@ -44,7 +45,7 @@ void ConstructTest() {
 
     bool caughtIA1 = false;
     try {
-        CPPMat::Matrix B(0, 0);
+        cppmat::Matrix B(0, 0);
     }
     catch (std::invalid_argument&) {
         caughtIA1 = true;
@@ -53,7 +54,7 @@ void ConstructTest() {
 
     bool caughtIA2 = false;
     try {
-        CPPMat::Matrix B(-15, 20, Aarr);
+        cppmat::Matrix B(-15, 20, Aarr);
     }
     catch (std::invalid_argument&) {
         caughtIA2 = true;
@@ -65,7 +66,7 @@ void ConstructTest() {
     double* bogusArr[] = {Brow1, Brow2};
     bool caughtIA3 = false;
     try {
-        CPPMat::Matrix(-1, 0, bogusArr);
+        cppmat::Matrix(-1, 0, bogusArr);
     }
     catch (std::invalid_argument&) {
         caughtIA3 = true;

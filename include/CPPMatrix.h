@@ -8,20 +8,20 @@
 // needed to forward-declare ostream for << operator
 #include <iosfwd>
 
-namespace CPPMat {
+namespace cppmat {
     class Matrix;
 }
 
 // must forward-declare friend functions
-CPPMat::Matrix operator* (const CPPMat::Matrix& A, const CPPMat::Matrix& B);
-CPPMat::Matrix operator* (double d,                const CPPMat::Matrix& A);
-CPPMat::Matrix operator* (const CPPMat::Matrix& A, double d);
-CPPMat::Matrix operator+ (const CPPMat::Matrix& A, const CPPMat::Matrix& B);
-CPPMat::Matrix operator- (const CPPMat::Matrix& A, const CPPMat::Matrix& B);
+cppmat::Matrix operator* (const cppmat::Matrix& A, const cppmat::Matrix& B);
+cppmat::Matrix operator* (double d, const cppmat::Matrix& A);
+cppmat::Matrix operator* (const cppmat::Matrix& A, double d);
+cppmat::Matrix operator+ (const cppmat::Matrix& A, const cppmat::Matrix& B);
+cppmat::Matrix operator- (const cppmat::Matrix& A, const cppmat::Matrix& B);
 
-std::ostream&  operator<<(std::ostream& os, const CPPMat::Matrix& A);
+std::ostream&  operator<<(std::ostream& os, const cppmat::Matrix& A);
 
-namespace CPPMat {
+namespace cppmat {
 
     class Matrix {
     public:
@@ -34,12 +34,23 @@ namespace CPPMat {
         // easier constructor using a single array of doubles
         Matrix(int rows, int cols, const double* matrixArray);
 
+        // Copy constructor.
         Matrix(const Matrix& src);
+
+        // Copy assignment operator.
+        Matrix& operator=(const Matrix& src);
+
+        // Move constructor.
+        Matrix(Matrix&& src) noexcept;
+
+        // Move assignment operator.
+        Matrix& operator=(Matrix&& src) noexcept;
+
+        // Destructor.
         ~Matrix();
 
 
         // Operators
-        Matrix& operator= (const Matrix& src);
         Matrix& operator*=(const Matrix& B);
         Matrix& operator*=(double d);
         Matrix& operator+=(const Matrix& B);
