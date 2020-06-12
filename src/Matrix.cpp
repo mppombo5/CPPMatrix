@@ -12,6 +12,10 @@
 /// Constructors/Destructors ///
 ////////////////////////////////
 
+// This is a general function to speed up the process of checking the
+// validity of a Matrix when it's trying to be constructed.
+// Returns false if the supplied arguments are invalid,
+// returns true and initializes data members otherwise.
 bool initialize(int rows, int cols, int* targetRows, int* targetCols) {
     if (rows < 1 || cols < 1) {
         *targetRows = 1;
@@ -170,10 +174,15 @@ cppmat::Matrix::~Matrix() {
 /// Operators ///
 /////////////////
 
+// Parentheses operator for quick access to a matrix value.
+// e.g. to get the value in the 2nd row, 3rd column,
+// you can use double x = A(2, 3).
+// IMPORTANT: row/column values are *1-INDEXED*.
 double cppmat::Matrix::operator()(int row, int col) const {
     return this->valueAt(row, col);
 }
 
+// Returns whether two matrices are the same size and have the same elements.
 bool cppmat::Matrix::operator==(const Matrix & m) const {
     if (m_rows != m.m_rows || m_cols != m.m_cols) {
         return false;
@@ -189,10 +198,13 @@ bool cppmat::Matrix::operator==(const Matrix & m) const {
     return true;
 }
 
+// Inverts the equality operator.
 bool cppmat::Matrix::operator!=(const Matrix& m) const {
     return !operator==(m);
 }
 
+// Friend function that returns the mathematical result
+// of multiplying the two matrix operands together.
 cppmat::Matrix operator*(const cppmat::Matrix& A, const cppmat::Matrix& B) {
     if (A.m_cols != B.m_rows) {
         std::stringstream err;
@@ -202,6 +214,7 @@ cppmat::Matrix operator*(const cppmat::Matrix& A, const cppmat::Matrix& B) {
         throw std::invalid_argument(err.str());
     }
 
+    // Construct the new matrix to return.
     int newRows = A.m_rows;
     int newCols = B.m_cols;
     int commonVal = A.m_cols;
@@ -222,6 +235,7 @@ cppmat::Matrix operator*(const cppmat::Matrix& A, const cppmat::Matrix& B) {
     return result;
 }
 
+// Similar to the friend multiplication operator, but with assignment at the end.
 cppmat::Matrix& cppmat::Matrix::operator*=(const Matrix &B) {
     if (m_cols != B.m_rows) {
         std::stringstream err;
@@ -247,18 +261,20 @@ cppmat::Matrix& cppmat::Matrix::operator*=(const Matrix &B) {
         }
     }
 
-
+    // Free previously used memory to prevent memory leaks.
     for (int i = 0; i < m_rows; i++) {
         delete [] m_array[i];
     }
     delete [] m_array;
 
+    // m_rows doesn't need to be updated.
     m_cols = newCols;
     m_array = newArr;
 
     return *this;
 }
 
+// Multiplies each element in 'A' by 'd'.
 cppmat::Matrix operator*(double d, const cppmat::Matrix& A) {
     int rows = A.m_rows;
     int cols = A.m_cols;
@@ -289,6 +305,8 @@ cppmat::Matrix& cppmat::Matrix::operator*=(double d) {
     return *this;
 }
 
+// Friend function that returns the result of adding
+// all corresponding elements of 'A' and 'B' together.
 cppmat::Matrix operator+(const cppmat::Matrix& A, const cppmat::Matrix& B) {
     if (A.m_rows != B.m_rows || A.m_cols != B.m_cols) {
         std::stringstream err;
@@ -311,8 +329,6 @@ cppmat::Matrix operator+(const cppmat::Matrix& A, const cppmat::Matrix& B) {
     cppmat::Matrix result(newRows, newCols, newArr);
     delete [] newArr;
     return result;
-
-    //return cppmat::Matrix(newRows, newCols, newArr);
 }
 
 cppmat::Matrix& cppmat::Matrix::operator+=(const Matrix& B) {
@@ -333,6 +349,7 @@ cppmat::Matrix& cppmat::Matrix::operator+=(const Matrix& B) {
     return *this;
 }
 
+// Same idea as the addition operator, but with subtraction instead.
 cppmat::Matrix operator-(const cppmat::Matrix& A, const cppmat::Matrix& B) {
     if (A.m_rows != B.m_rows || A.m_cols != B.m_cols) {
         std::stringstream err;
@@ -355,8 +372,6 @@ cppmat::Matrix operator-(const cppmat::Matrix& A, const cppmat::Matrix& B) {
     cppmat::Matrix result(newRows, newCols, newArr);
     delete [] newArr;
     return result;
-
-    //return cppmat::Matrix(newRows, newCols, newArr);
 }
 
 cppmat::Matrix& cppmat::Matrix::operator-=(const Matrix& B) {
@@ -377,6 +392,8 @@ cppmat::Matrix& cppmat::Matrix::operator-=(const Matrix& B) {
     return *this;
 }
 
+// Gives an easier syntax for formatting all elments in the array.
+// With this function, you can do things like { std::cout << A; }.
 std::ostream& operator<<(std::ostream& os, const cppmat::Matrix& A) {
     for (int i = 0; i < A.m_rows; i++) {
         for (int j = 0; j < A.m_cols; j++) {
@@ -404,6 +421,7 @@ int cppmat::Matrix::cols() const {
     return m_cols;
 }
 
+// Predecessor to ostream& operator<<.
 void cppmat::Matrix::print() const {
     for (int i = 0; i < m_rows; i++) {
         for (int j = 0; j < m_cols; j++) {
@@ -413,6 +431,7 @@ void cppmat::Matrix::print() const {
     }
 }
 
+// Returns *1-INDEXED* value in the matrix at row 'row' and column 'col'.
 double cppmat::Matrix::valueAt(int row, int col) const {
     if (row < 1 || row > m_rows || col < 1 || col > m_cols) {
         std::stringstream err;
@@ -424,7 +443,7 @@ double cppmat::Matrix::valueAt(int row, int col) const {
     return m_array[row-1][col-1];
 }
 
-// Functions to return an array containing a row or column vector with the elements in the argument's row or column
+// Functions to return an array containing a row or column vector with the elements in the argument's row or column.
 
 std::vector<double> cppmat::Matrix::rowVector(int row) const {
     if (row < 1 || row > m_rows) {
@@ -462,6 +481,7 @@ bool cppmat::Matrix::isSquare() const {
     return m_rows == m_cols;
 }
 
+// Returns the transpose of the matrix.
 cppmat::Matrix cppmat::Matrix::transpose() const {
     auto* newArr = new double[m_rows * m_cols];
     for (int i = 0; i < m_rows; i++) {
@@ -473,10 +493,9 @@ cppmat::Matrix cppmat::Matrix::transpose() const {
     Matrix result(m_cols, m_rows, newArr);
     delete [] newArr;
     return result;
-
-    //return Matrix(m_cols, m_rows, newArr);
 }
 
+// Helper function for the recursive determinant function.
 double cppmat::Matrix::detHelper(int size, int offset, double** array) {
     if (size == 2) {
         /*
@@ -508,6 +527,10 @@ double cppmat::Matrix::detHelper(int size, int offset, double** array) {
     return determinant;
 }
 
+// Returns the determinant of the matrix.
+// NOTE: this function was basically an exercise in my recursive abilities;
+// it is NOT efficient in any sense of the word,
+// and should not be used for actual intensive calculation.
 double cppmat::Matrix::determinant() {
     if (!isSquare()) {
         std::stringstream err;
@@ -524,7 +547,8 @@ double cppmat::Matrix::determinant() {
     return detHelper(m_rows, 0, m_array);
 }
 
-// just an alias for determinant()
+// Just an alias for determinant().
+// Eventually I want to make it a separate function, i.e. cppmat::det(A).
 double cppmat::Matrix::det() {
     return this->determinant();
 }
@@ -534,7 +558,7 @@ double cppmat::Matrix::det() {
 /// Mutators ///
 ////////////////
 
-// inserts a value 'value' into into the matrix at row 'row,' column 'col'
+// Sets the value of the matrix at row 'row' and column 'col' to 'value'.
 void cppmat::Matrix::insert(int row, int col, double value) {
     if (row > m_rows || row < 1 || col > m_cols || col < 1) {
         std::stringstream err;
@@ -548,7 +572,7 @@ void cppmat::Matrix::insert(int row, int col, double value) {
     m_array[row - 1][col - 1] = value;
 }
 
-// simply swaps two rows in a matrix
+// Swaps two rows in a matrix. 'row1' and 'row2' are 1-INDEXED.
 void cppmat::Matrix::swapRows(int row1, int row2) {
     if (row1 < 1 || row1 > m_rows || row2 < 1 || row2 > m_rows) {
         std::stringstream err;
