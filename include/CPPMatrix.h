@@ -21,36 +21,112 @@ cppmat::Matrix operator- (const cppmat::Matrix& A, const cppmat::Matrix& B);
 
 std::ostream&  operator<<(std::ostream& os, const cppmat::Matrix& A);
 
+/// The main namespace for the CPPMatrix library.
 namespace cppmat {
 
+/// The main Matrix class.
+/**
+ * The Matrix class represents a 2-dimensional, numerical matrix. It supplies
+ * several functions to perform calculations and manipulations on the matrix,
+ * as well as overloaded operators that perform the logical, mathematical
+ * equivalent of using those operators on a real matrix.
+ *
+ * @author Matthew Pombo
+ */
 class Matrix {
 public:
-    // initialize a rows x cols matrix with all 0's
+    ////////////////////
+    /// Constructors ///
+    ////////////////////
+
+    /// The most basic constructor for the Matrix class.
+    /**
+     * This constructor takes in integer values for the number of rows and
+     * columns in the matrix to be constructed, and initializes every value to 0.
+     *
+     * @param rows The number of rows in the matrix.
+     * @param cols The number of columns in the matrix.
+     */
     Matrix(int rows, int cols);
 
-    // initialize a rows x cols matrix according to a given 2D array or vector
+    /// Initializes matrix with values according to 2D array of doubles.
+    /**
+     * This constructor takes in the number of rows and columns in the matrix
+     * to be constructed, and initializes the values in the matrix according to
+     * the 2D array of doubles passed in as 'matrixArray'.
+     *
+     * @param rows The number of rows in the matrix.
+     * @param cols The number of columns in the matrix.
+     * @param matrixArray A pointer to a 2D array of doubles with which to initialize the matrix.
+     */
     Matrix(int rows, int cols, double** matrixArray);
 
-    // easier constructor using a single array of doubles
+    /// Initializes matrix with values according to a 1D array of doubles.
+    /**
+     * This constructor takes in the number of rows and columns in the matrix
+     * to be constructed, and initializes values according to the 1D array of
+     * doubles 'matrixArray'. The constructor automatically separates the values
+     * in 'matrixArray' and populates the rows and columns appropriately. This
+     * method of initialization should be preferred over the 2D array of doubles
+     * when possible: (1) for the sake of convenience, and (2) this constructor
+     * treats the array as const.
+     *
+     * @param rows The number of rows in the matrix.
+     * @param cols The number of columns in the matrix.
+     * @param matrixArray
+     */
     Matrix(int rows, int cols, const double* matrixArray);
 
-    // Copy constructor.
+    /// Matrix copy constructor.
+    /**
+     * A standard copy constructor for the Matrix class; creates a deep copy
+     * of 'src' by manually copying over all values from its internal array
+     * of doubles.
+     *
+     * @param src The lvalue Matrix instance to be copied.
+     */
     Matrix(const Matrix& src);
 
-    // Copy assignment operator.
-    Matrix& operator=(const Matrix& src);
-
-    // Move constructor.
+    /// Matrix move constructor.
+    /**
+     * A standard move constructor for the Matrix class, adhering to the
+     * conventions set by the C++11 standard. Claims ownership of the data
+     * members in 'src', and sets all dynamically allocated memory in
+     * 'src' to nullptr.
+     *
+     * @param src The rvalue Matrix instance from which to construct the lvalue.
+     */
     Matrix(Matrix&& src) noexcept;
 
-    // Move assignment operator.
+    /// Matrix copy-assignment operator.
+    /**
+     * Frees all allocated memory held by the Matrix instance and performs a
+     * deep copy of data members in 'src'.
+     *
+     * @param src Matrix instance to be copied.
+     * @return A deep copy of 'src'.
+     */
+    Matrix& operator=(const Matrix& src);
+
+    /// Matrix move-assignment operator.
+    /**
+     * Frees all dynamically allocated memory in the current Matrix instance,
+     * claims ownership of all data members owned by the rvalue 'src', and
+     * sets all memory previously owned by 'src' to nullptr.
+     *
+     * @param src The rvalue Matrix instance from which to assign this Matrix instance.
+     * @return A Matrix instance with the data members previously owned by 'src'.
+     */
     Matrix& operator=(Matrix&& src) noexcept;
 
-    // Destructor.
+    /// Basic destructor which frees all allocated memory.
     ~Matrix();
 
 
-    // Operators
+    /////////////////
+    /// Operators ///
+    /////////////////
+
     Matrix& operator*=(const Matrix& B);
     Matrix& operator*=(double d);
     Matrix& operator+=(const Matrix& B);
@@ -69,9 +145,33 @@ public:
     friend std::ostream& (::operator<<(std::ostream& os, const Matrix& A));
 
 
-    // Accessors
+    /////////////////
+    /// Accessors ///
+    /////////////////
+
+    /// Returns the number of rows in the matrix.
+    /**
+     * @return The number of rows in this matrix instance.
+     */
     int rows() const;
+
+    /// Returns the number of columns in the matrix.
+    /**
+     * @return The number of columns in this matrix instance.
+     */
     int cols() const;
+
+    /// Returns the value of an element in the matrix.
+    /**
+     * Returns the element in the matrix at row 'row', column 'col'.
+     * NOTE: the row and column arguments are *1-INDEXED*. This means that if
+     * you want the value at row 2 and column 3, you would call
+     * valueAt(2, 3); NOT valueAt(1, 2).
+     *
+     * @param row The 1-indexed row in which the value is located.
+     * @param col The 1-indexed column in which the value is located.
+     * @return The value in this matrix instance at row 'row', column 'col'.
+     */
     double valueAt(int row, int col) const;
     std::vector<double> rowVector(int row) const;
     std::vector<double> colVector(int col) const;
@@ -83,7 +183,10 @@ public:
     double det();
 
 
-    // Mutators
+    ////////////////
+    /// Mutators ///
+    ////////////////
+
     void insert(int row, int col, double value);
     void swapRows(int row1, int row2);
 
