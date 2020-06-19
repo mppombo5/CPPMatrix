@@ -35,9 +35,9 @@ namespace cppmat {
  */
 class Matrix {
 public:
-    ////////////////////
-    /// Constructors ///
-    ////////////////////
+    //////////////////
+    // Constructors //
+    //////////////////
 
     /// The most basic constructor for the Matrix class.
     /**
@@ -123,9 +123,9 @@ public:
     ~Matrix();
 
 
-    /////////////////
-    /// Operators ///
-    /////////////////
+    ///////////////
+    // Operators //
+    ///////////////
 
     Matrix& operator*=(const Matrix& B);
     Matrix& operator*=(double d);
@@ -136,6 +136,7 @@ public:
     double  operator()(int row, int col) const;
 
     // wack syntax for friend functions
+    // TODO: move operators into the cppmat namespace; ADL allows use of just operators
     friend Matrix (::operator*(const Matrix& A, const Matrix& B));
     friend Matrix (::operator*(double d,        const Matrix& A));
     friend Matrix (::operator*(const Matrix& A, double d));
@@ -145,9 +146,9 @@ public:
     friend std::ostream& (::operator<<(std::ostream& os, const Matrix& A));
 
 
-    /////////////////
-    /// Accessors ///
-    /////////////////
+    ///////////////
+    // Accessors //
+    ///////////////
 
     /// Returns the number of rows in the matrix.
     /**
@@ -165,7 +166,7 @@ public:
     /**
      * Returns the element in the matrix at row 'row', column 'col'.
      * NOTE: the row and column arguments are *1-INDEXED*. This means that if
-     * you want the value at row 2 and column 3, you would call
+     * you want the value in the 2nd row and 3rd column, you would call
      * valueAt(2, 3); NOT valueAt(1, 2).
      *
      * @param row The 1-indexed row in which the value is located.
@@ -173,21 +174,91 @@ public:
      * @return The value in this matrix instance at row 'row', column 'col'.
      */
     double valueAt(int row, int col) const;
+
+    /// Returns a copy of a row in the matrix.
+    /**
+     * Constructs a vector of doubles with the same elements as in the row
+     * 'row' in the matrix.
+     * NOTE: the row argument is *1-INDEXED*.
+     *
+     * @param row The 1-indexed row from which to copy values.
+     * @return A copy of the 'row'th row in the matrix, as a std::vector of doubles.
+     */
     std::vector<double> rowVector(int row) const;
+
+    /// Returns a copy of a column in the matrix.
+    /**
+     * Constructs a vector of doubles with the same elements as in the column
+     * 'col' in the matrix.
+     * NOTE: the column argument is *1-INDEXED*.
+     *
+     * @param col The 1-indexed column from which to copy values.
+     * @return A copy of the 'col'th column in the matrix, as a std::vector of doubles.
+     */
     std::vector<double> colVector(int col) const;
+
+    /// Determine whether the matrix is square.
+    /**
+     * @return Whether or not the matrix has as many rows as it has columns.
+     */
     bool isSquare() const;
+
+    /// Print a text representation of the matrix.
+    /**
+     * Prints each element of the matrix to standard output. Each element is
+     * separated by a tab literal; therefore, the visual representation is
+     * not guaranteed to align perfectly in the case of long numbers.
+     */
+    // TODO: link to ostream << overload
     void print() const;
+
+    /// Get the transpose of the matrix.
+    /**
+     * @return The transpose of this matrix. That is, the matrix formed by
+     * turning each of its constituent rows into its constituent columns.
+     */
     Matrix transpose() const;
 
+    /// Get the determinant of the matrix.
+    /**
+     * @return The determinant of the matrix. NOTE: the current implementation
+     * uses recursion instead of the faster row-reducing method. It is not
+     * recommended to use this function for actual, time-sensitive
+     * calculations.
+     */
     double determinant();
+
+    /// An alias for determinant().
+    /**
+     * @sa Matrix::determinant()
+     */
     double det();
 
 
-    ////////////////
-    /// Mutators ///
-    ////////////////
+    //////////////
+    // Mutators //
+    //////////////
 
+    /// Change an element in the matrix.
+    /**
+     * This function takes in the row and column of the element to change,
+     * and sets it to the value of the third argument.
+     * NOTE: the row and column arguments are *1-INDEXED*.
+     *
+     * @param row The 1-indexed row of the element you wish to change.
+     * @param col The 1-indexed column of the element you wish to change.
+     * @param value The value to set the element to.
+     */
     void insert(int row, int col, double value);
+
+    /// Swap two rows in the matrix.
+    /**
+     * This function takes in two, *1-indexed* row indices, and swaps the
+     * elements within the two rows.
+     *
+     * @param row1 The first row to swap.
+     * @param row2 The second row to swap.
+     */
     void swapRows(int row1, int row2);
 
 private:
