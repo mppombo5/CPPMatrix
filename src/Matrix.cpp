@@ -203,28 +203,28 @@ bool cppmat::Matrix::operator!=(const Matrix& m) const {
     return !operator==(m);
 }
 
-// Friend function that returns the mathematical result
-// of multiplying the two matrix operands together.
-cppmat::Matrix operator*(const cppmat::Matrix& A, const cppmat::Matrix& B) {
-    if (A.m_cols != B.m_rows) {
+// Overloaded multiplication operator. Returns the result of multiplying
+// the two matrix operands together.
+cppmat::Matrix cppmat::Matrix::operator*(const cppmat::Matrix& rhs) const {
+    if (m_cols != rhs.m_rows) {
         std::stringstream err;
         err << "Matrix multiplication error: columns in first operand must equal rows in the second.\n"
-            << "Received bad matrix dimensions [(" << A.m_rows << " x " << A.m_cols << ") * ("
-            << B.m_rows << " x " << B.m_cols << ")].";
+            << "Received bad matrix dimensions [(" << m_rows << " x " << m_cols << ") * ("
+            << rhs.m_rows << " x " << rhs.m_cols << ")].";
         throw std::invalid_argument(err.str());
     }
 
     // Construct the new matrix to return.
-    int newRows = A.m_rows;
-    int newCols = B.m_cols;
-    int commonVal = A.m_cols;
+    int newRows = m_rows;
+    int newCols = rhs.m_cols;
+    int commonVal = m_cols;
     auto* newArr = new double[newRows * newCols];
 
     for (int i = 0; i < newRows; i++) {
         for (int j = 0; j < newCols; j++) {
             double entry = 0;
             for (int k = 0; k < commonVal; k++) {
-                entry += (A.m_array[i][k] * B.m_array[k][j]);
+                entry += (m_array[i][k] * rhs.m_array[k][j]);
             }
             newArr[(i*newCols) + j] = entry;
         }
@@ -275,14 +275,14 @@ cppmat::Matrix& cppmat::Matrix::operator*=(const Matrix &B) {
 }
 
 // Multiplies each element in 'A' by 'd'.
-cppmat::Matrix operator*(double d, const cppmat::Matrix& A) {
-    int rows = A.m_rows;
-    int cols = A.m_cols;
+cppmat::Matrix cppmat::Matrix::operator*(double d) const {
+    int rows = m_rows;
+    int cols = m_cols;
     auto* newArr = new double[rows * cols];
 
     for (int i = 0; i < rows; i++) {
         for (int j = 0; j < cols; j++) {
-            newArr[(i*cols) + j] = A.m_array[i][j] * d;
+            newArr[(i*cols) + j] = m_array[i][j] * d;
         }
     }
 
@@ -291,8 +291,8 @@ cppmat::Matrix operator*(double d, const cppmat::Matrix& A) {
     return result;
 }
 
-cppmat::Matrix operator*(const cppmat::Matrix& A, double d) {
-    return d * A;
+cppmat::Matrix cppmat::operator*(double d, const cppmat::Matrix& A) {
+    return A * d;
 }
 
 cppmat::Matrix& cppmat::Matrix::operator*=(double d) {
@@ -306,23 +306,23 @@ cppmat::Matrix& cppmat::Matrix::operator*=(double d) {
 }
 
 // Friend function that returns the result of adding
-// all corresponding elements of 'A' and 'B' together.
-cppmat::Matrix operator+(const cppmat::Matrix& A, const cppmat::Matrix& B) {
-    if (A.m_rows != B.m_rows || A.m_cols != B.m_cols) {
+// all corresponding elements of this matrix and 'rhs' together.
+cppmat::Matrix cppmat::Matrix::operator+(const cppmat::Matrix& rhs) const {
+    if (m_rows != rhs.m_rows || m_cols != rhs.m_cols) {
         std::stringstream err;
         err << "Matrix addition error: operands must have the same dimensions.\n"
-            << "Received bad matrix dimensions [(" << A.m_rows << " x " << A.m_cols << ") + ("
-            << B.m_rows << " x " << B.m_cols << ")].";
+            << "Received bad matrix dimensions [(" << m_rows << " x " << m_cols << ") + ("
+            << rhs.m_rows << " x " << rhs.m_cols << ")].";
         throw std::invalid_argument(err.str());
     }
 
-    int newRows = A.m_rows;
-    int newCols = A.m_cols;
+    int newRows = m_rows;
+    int newCols = m_cols;
     auto* newArr = new double[newRows * newCols];
 
     for (int i = 0; i < newRows; i++) {
         for (int j = 0; j < newCols; j++) {
-            newArr[(i*newCols) + j] = A.m_array[i][j] + B.m_array[i][j];
+            newArr[(i*newCols) + j] = m_array[i][j] + rhs.m_array[i][j];
         }
     }
 
@@ -350,22 +350,22 @@ cppmat::Matrix& cppmat::Matrix::operator+=(const Matrix& B) {
 }
 
 // Same idea as the addition operator, but with subtraction instead.
-cppmat::Matrix operator-(const cppmat::Matrix& A, const cppmat::Matrix& B) {
-    if (A.m_rows != B.m_rows || A.m_cols != B.m_cols) {
+cppmat::Matrix cppmat::Matrix::operator-(const cppmat::Matrix& rhs) const {
+    if (m_rows != rhs.m_rows || m_cols != rhs.m_cols) {
         std::stringstream err;
         err << "Matrix subtraction error: operands must have the same dimensions.\n"
-            << "Received bad matrix dimensions [(" << A.m_rows << " x " << A.m_cols << ") - ("
-            << B.m_rows << " x " << B.m_cols << ")].";
+            << "Received bad matrix dimensions [(" << m_rows << " x " << m_cols << ") - ("
+            << rhs.m_rows << " x " << rhs.m_cols << ")].";
         throw std::invalid_argument(err.str());
     }
 
-    int newRows = A.m_rows;
-    int newCols = A.m_cols;
+    int newRows = m_rows;
+    int newCols = m_cols;
     auto* newArr = new double[newRows * newCols];
 
     for (int i = 0; i < newRows; i++) {
         for (int j = 0; j < newCols; j++) {
-            newArr[(i*newCols) + j] = A.m_array[i][j] - B.m_array[i][j];
+            newArr[(i*newCols) + j] = m_array[i][j] - rhs.m_array[i][j];
         }
     }
 
@@ -394,18 +394,18 @@ cppmat::Matrix& cppmat::Matrix::operator-=(const Matrix& B) {
 
 // Gives an easier syntax for formatting all elments in the array.
 // With this function, you can do things like { std::cout << A; }.
-std::ostream& operator<<(std::ostream& os, const cppmat::Matrix& A) {
-    for (int i = 0; i < A.m_rows; i++) {
-        for (int j = 0; j < A.m_cols; j++) {
-            os << A.m_array[i][j];
-            if (j != A.m_cols-1) {
-                os << '\t';
+std::ostream& cppmat::operator<<(std::ostream& lhs, const cppmat::Matrix& rhs) {
+    for (int i = 0; i < rhs.m_rows; i++) {
+        for (int j = 0; j < rhs.m_cols; j++) {
+            lhs << rhs.m_array[i][j];
+            if (j != rhs.m_cols - 1) {
+                lhs << '\t';
             }
         }
-        os << std::endl;
+        lhs << std::endl;
     }
 
-    return os;
+    return lhs;
 }
 
 

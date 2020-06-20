@@ -8,21 +8,15 @@
 // needed to forward-declare ostream for << operator
 #include <iosfwd>
 
-namespace cppmat {
-    class Matrix;
-}
-
-// must forward-declare friend functions
-cppmat::Matrix operator* (const cppmat::Matrix& A, const cppmat::Matrix& B);
-cppmat::Matrix operator* (double d, const cppmat::Matrix& A);
-cppmat::Matrix operator* (const cppmat::Matrix& A, double d);
-cppmat::Matrix operator+ (const cppmat::Matrix& A, const cppmat::Matrix& B);
-cppmat::Matrix operator- (const cppmat::Matrix& A, const cppmat::Matrix& B);
-
-std::ostream&  operator<<(std::ostream& os, const cppmat::Matrix& A);
-
 /// The main namespace for the CPPMatrix library.
 namespace cppmat {
+
+// Forward-declare for overload declarations.
+class Matrix;
+
+// Non-member operator overloads.
+Matrix operator*(double d, const Matrix& A);
+std::ostream& operator<<(std::ostream& lhs, const Matrix& rhs);
 
 /// The main Matrix class.
 /**
@@ -73,7 +67,7 @@ public:
      *
      * @param rows The number of rows in the matrix.
      * @param cols The number of columns in the matrix.
-     * @param matrixArray
+     * @param matrixArray A pointer to a 1D array of doubles with which to initialize the matrix.
      */
     Matrix(int rows, int cols, const double* matrixArray);
 
@@ -127,23 +121,29 @@ public:
     // Operators //
     ///////////////
 
+    /// The result of multiplying two matrices together.
+    /**
+     * This overloaded multiplication operator returns a new matrix. This new
+     * matrix is mathematical result of multiplying the two matrix operands
+     * together.
+     *
+     * @param rhs The matrix by which to multiply the left hand side.
+     * @return The result of multiplying the two operands.
+     */
+    Matrix operator*(const Matrix& rhs) const;
+    
     Matrix& operator*=(const Matrix& B);
+    Matrix operator*(double d) const;
     Matrix& operator*=(double d);
+    Matrix operator+(const Matrix& rhs) const;
     Matrix& operator+=(const Matrix& B);
+    Matrix operator-(const Matrix& rhs) const;
     Matrix& operator-=(const Matrix& B);
-    bool    operator==(const Matrix& m) const;
-    bool    operator!=(const Matrix& m) const;
-    double  operator()(int row, int col) const;
+    bool operator==(const Matrix& m) const;
+    bool operator!=(const Matrix& m) const;
+    double operator()(int row, int col) const;
 
-    // wack syntax for friend functions
-    // TODO: move operators into the cppmat namespace; ADL allows use of just operators
-    friend Matrix (::operator*(const Matrix& A, const Matrix& B));
-    friend Matrix (::operator*(double d,        const Matrix& A));
-    friend Matrix (::operator*(const Matrix& A, double d));
-    friend Matrix (::operator+(const Matrix& A, const Matrix& B));
-    friend Matrix (::operator-(const Matrix& A, const Matrix& B));
-
-    friend std::ostream& (::operator<<(std::ostream& os, const Matrix& A));
+    friend std::ostream& operator<<(std::ostream& os, const Matrix& rhs);
 
 
     ///////////////
@@ -209,7 +209,6 @@ public:
      * separated by a tab literal; therefore, the visual representation is
      * not guaranteed to align perfectly in the case of long numbers.
      */
-    // TODO: link to ostream << overload
     void print() const;
 
     /// Get the transpose of the matrix.

@@ -6,7 +6,9 @@
 #include <cassert>
 #include "../include/CPPMatrix.h"
 #include "MainTest.h"
-using cppmat::Matrix;
+
+// Purposefully NOT using cppmat::Matrix or anything like that, to make
+// sure operators can function outside of namespace specificity.
 
 void MultTest() {
     std::cout << "Starting multiplication tests..." << std::endl;
@@ -64,9 +66,9 @@ void MultTest() {
             4, 5, 6,
             7, 8, 9
     };
-    Matrix F(3, 3,Farr);
+    cppmat::Matrix F(3, 3, Farr);
     double d1 = 3.6;
-    Matrix d1F = d1 * F;
+    cppmat::Matrix d1F = d1 * F;
     for (int i = 0; i < 3; i++) {
         for (int j = 0; j < 3; j++) {
             assert(d1F(i + 1, j + 1) == (d1 * F(i + 1, j + 1)));
@@ -95,7 +97,7 @@ void AddTest() {
     cppmat::Matrix C = A + B;
     double Crow1[2] = { 4, 0 };
     double Crow2[2] = { 0, 4 };
-    double* Crows[] = { Crow1, Crow2 };
+    double* Crows[] = { Crow1, Crow2 }; // caw caw
 
     for (int i = 0; i < A.rows(); i++) {
         for (int j = 0; j < A.cols(); j++) {
@@ -130,14 +132,14 @@ void AddTest() {
 
     bool caughtIA2 = false;
     try {
-        Matrix F = Matrix(4, 4) + Matrix(4, 5);
+        cppmat::Matrix F = cppmat::Matrix(4, 4) + cppmat::Matrix(4, 5);
     }
     catch (std::invalid_argument&) {
         caughtIA2 = true;
     }
     assert(caughtIA2);
 
-    Matrix Acopy = A;
+    cppmat::Matrix Acopy = A;
     A += D;
     assert(A == C);
 
@@ -149,15 +151,15 @@ void AddTest() {
             5, 6,
             7, 8
     };
-    Matrix G(2, 2, Garr);
+    cppmat::Matrix G(2, 2, Garr);
 
     double Harr[2*2] = {
             1, 2,
             3, 4
     };
-    Matrix H(2, 2, Harr);
+    cppmat::Matrix H(2, 2, Harr);
 
-    Matrix HfromG = G - H;
+    cppmat::Matrix HfromG = G - H;
     for (int i = 0; i < 2; i++) {
         for (int j = 0; j < 2; j++) {
             assert(HfromG(i+1, j+1) == 4);
@@ -207,7 +209,7 @@ void ParenTest() {
             5, 6, 7, 8,
             9, 8, 7, 6
     };
-    Matrix A(3, 4, Aarr);
+    cppmat::Matrix A(3, 4, Aarr);
     double bad;
     // BA = bad access
     bool caughtBA1 = false;
